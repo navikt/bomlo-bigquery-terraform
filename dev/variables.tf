@@ -13,3 +13,8 @@ variable "dataprodukt_arbeidsgiveropplysninger_cloud_sql_port" {
   type        = string
   default     = "5432"
 }
+
+variable "arbeidsgiveropplysninger_bigquery_secret" {
+  description = "The key of the GCP secret that provides the spinnsyn database credentials."
+  type        = string
+}
