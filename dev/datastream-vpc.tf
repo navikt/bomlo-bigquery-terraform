@@ -45,7 +45,6 @@ resource "google_compute_firewall" "allow_datastream_to_cloud_sql" {
   source_ranges = [google_datastream_private_connection.tbd_datastream_private_connection.vpc_peering_config.0.subnet]
 }
 
-
 data "google_sql_database_instance" "dataprodukt_arbeidsgiveropplysninger_db" {
   name = "dataprodukt-arbeidsgiveropplysninger"
 }
@@ -103,4 +102,13 @@ resource "google_compute_instance" "tbd_datastream_cloud_sql_proxy_vm" {
   labels = {
     container-vm = module.cloud_sql_auth_proxy_container_datastream.vm_container_label
   }
+}
+
+// Datastream connection profile for BigQuery target. Can be used by multiple streams.
+resource "google_datastream_connection_profile" "datastream_bigquery_connection_profile" {
+  display_name          = "datastream-bigquery-connection-profile"
+  location              = var.gcp_project["region"]
+  connection_profile_id = "datastream-bigquery-connection-profile"
+
+  bigquery_profile {}
 }
