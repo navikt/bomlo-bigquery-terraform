@@ -23,6 +23,6 @@ resource "google_datastream_private_connection" "tbd_datastream_private_connecti
 
   vpc_peering_config {
     vpc    = google_compute_network.tbd_datastream_private_vpc.id
-    subnet = "10.166.0.0/29"
+    subnet = "10.1.0.0/29"
   }
 }
