@@ -1,5 +1,5 @@
-resource "google_bigquery_dataset" "arbeidsgiveropplysninger_bigquery_dataset" {
-  dataset_id = "arbeidsgiveropplysninger_bigquery_dataset"
+resource "google_bigquery_dataset" "arbeidsgiveropplysninger_dataset" {
+  dataset_id = "arbeidsgiveropplysninger_dataset"
   location   = var.gcp_project["region"]
   project    = var.gcp_project["project"]
   access {
@@ -26,8 +26,7 @@ resource "google_datastream_connection_profile" "arbeidsgiveropplysninger_postgr
     port     = var.dataprodukt_arbeidsgiveropplysninger_cloud_sql_port
     username = local.dataprodukt_arbeidsgiveropplysninger_db_credentials["username"]
     password = local.dataprodukt_arbeidsgiveropplysninger_db_credentials["password"]
-    // TODO: undersøk navngivning av database
-    database = "arbeidsgiveropplysninger"
+    database = data.google_sql_database_instance.dataprodukt_arbeidsgiveropplysninger_db.name
   }
 
   private_connectivity {
