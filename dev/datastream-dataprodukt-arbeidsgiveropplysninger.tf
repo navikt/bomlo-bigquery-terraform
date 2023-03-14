@@ -26,7 +26,7 @@ resource "google_datastream_connection_profile" "arbeidsgiveropplysninger_postgr
     port     = var.dataprodukt_arbeidsgiveropplysninger_cloud_sql_port
     username = local.dataprodukt_arbeidsgiveropplysninger_db_credentials["username"]
     password = local.dataprodukt_arbeidsgiveropplysninger_db_credentials["password"]
-    database = data.google_sql_database_instance.dataprodukt_arbeidsgiveropplysninger_db.name
+    database = "arbeidsgiveropplysninger"
   }
 
   private_connectivity {
