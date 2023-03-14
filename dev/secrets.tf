@@ -3,7 +3,7 @@ data "google_secret_manager_secret_version" "arbeidsgiveropplysninger_datastream
 }
 
 locals {
-    dataprodukt_arbeidsgiveropplysninger_db_credentials = jsondecode(
-        data.google_secret_manager_secret_version.arbeidsgiveropplysninger_datastream_user_secret.secret_data
-    )
+  dataprodukt_arbeidsgiveropplysninger_db_credentials = jsondecode(
+    data.google_secret_manager_secret_version.arbeidsgiveropplysninger_datastream_user_secret.secret_data
+  )
 }
