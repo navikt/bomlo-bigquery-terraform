@@ -74,7 +74,7 @@ resource "google_datastream_stream" "arbeidsgiveropplysninger_datastream" {
     destination_connection_profile = google_datastream_connection_profile.datastream_bigquery_connection_profile.id
 
     bigquery_destination_config {
-      data_freshness = "900s"
+      data_freshness = "300s"
 
       single_target_dataset {
         dataset_id = "${var.gcp_project["project"]}:${google_bigquery_dataset.arbeidsgiveropplysninger_dataset.dataset_id}"
