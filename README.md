@@ -38,7 +38,8 @@ I dette repoet er det opprettet en bruker med navn `terraform` i `tbd-dev` og `t
     * Velg IP-range du lagde i punkt 9.
     * Trykk på _Create Connection_ 
 
-11. Lag reverse proxy
+11. Lag datastream private connection med vpc peering med subnet (f.eks. tbd_datastream_private_connection)
+12. Lag reverse proxy
 12. Lag db connection profiles (inkl. secrets), datastream private connection 
 13. Lag datastream_bigquery connection profile og dataset
 14. Lag datastream
