@@ -7,3 +7,9 @@ variable "gcp_project" {
     project = "tbd-prod-eacd"
   }
 }
+
+variable "dataprodukt_arbeidsgiveropplysninger_cloud_sql_port" {
+  description = "The port exposed by the dataprodukt_arbeidsgiveropplysninger database Cloud SQL instance."
+  type        = string
+  default     = "5432"
+}
