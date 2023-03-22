@@ -7,9 +7,10 @@ Opprettelse av bucket og bruk av denne for terraform state må gjøres i to sepa
    * BigQuery Data Owner
    * Editor
    * Secret Manager Secret Accessor
-  
+I dette repoet er det opprettet en bruker med navn `terraform` i `tbd-dev` og `tbd-prod` med disse tilgangene. 
+   
 2. Opprett key for service account og last ned
-3. Legg inn filen med service account keyen i GitHub secret (vår secret for dev heter GCP_SECRET_DEV)
+3. Legg inn filen med service account keyen i GitHub secret (våre secrets heter GCP_SECRET_DEV og GCP_SECRET_PROD)
 4. Installer Terraform lokalt og sett miljøvariabel GOOGLE_APPLICATION_CREDENTIALS som peker til den nedlastede filen
     
     NB: Denne gir tilgang til service accounten i GCP, så den burde nok ikke beholdes lokalt, spesielt for prod
