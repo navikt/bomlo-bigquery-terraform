@@ -25,9 +25,19 @@ I dette repoet er det opprettet en bruker med navn `terraform` i `tbd-dev` og `t
     terraform init
     ```   
 7. Nå kan workflowen pushes
-8. Lag VPC 
-9. Lag IP-range 
-10. Gi databasen en private IP (gjøres manuelt i GCP) 
+8. Lag VPC (f.eks. tbd_datastream_private_vpc)
+9. Lag IP-range (f.eks. tbd_datastream_vpc_ip_range)
+10. Gi databasen en private IP (NB: Da får databasen nedetid 😱) (f.eks. dataprodukt-arbeidsgiveropplysninger): 
+    * Gå til databasen i GCP 
+    * Trykk _Edit_ 
+    * Trykk på _Connections_ 
+    * Huk av for _Private IP_ 
+    * Velg nettverket du lagde i punkt 8.
+    * Trykk _Set up connection_
+    * Trykk _Enable API_ (kun første gang per prosjekt)
+    * Velg IP-range du lagde i punkt 9.
+    * Trykk på _Create Connection_ 
+
 11. Lag reverse proxy
 12. Lag db connection profiles (inkl. secrets), datastream private connection 
 13. Lag datastream_bigquery connection profile og dataset
