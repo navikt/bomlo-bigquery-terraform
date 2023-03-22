@@ -104,3 +104,12 @@ resource "google_compute_instance" "tbd_datastream_cloud_sql_proxy_vm" {
     container-vm = module.cloud_sql_auth_proxy_container_datastream.vm_container_label
   }
 }
+
+// Datastream connection profile for BigQuery target. Can be used by multiple streams.
+resource "google_datastream_connection_profile" "datastream_bigquery_connection_profile" {
+  location              = var.gcp_project["region"]
+  display_name          = "datastream-bigquery-connection-profile"
+  connection_profile_id = "datastream-bigquery-connection-profile"
+
+  bigquery_profile {}
+}
