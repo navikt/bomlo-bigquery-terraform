@@ -44,7 +44,7 @@ jobs:
     concurrency: terraform-plan-prod
     defaults:
       run:
-        working-directory: ${{ env.DEV_PROD }}
+        working-directory: ${{ env.PROD_DIR }}
 
     env:
       GOOGLE_CREDENTIALS: ${{ secrets.GCP_SECRET_PROD }}
