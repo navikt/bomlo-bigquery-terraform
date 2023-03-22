@@ -25,3 +25,10 @@ I dette repoet er det opprettet en bruker med navn `terraform` i `tbd-dev` og `t
     terraform init
     ```   
 7. Nå kan workflowen pushes
+8. Lag VPC 
+9. Lag IP-range 
+10. Gi databasen en private IP (gjøres manuelt i GCP) 
+11. Lag reverse proxy
+12. Lag db connection profiles (inkl. secrets), datastream private connection 
+13. Lag datastream_bigquery connection profile og dataset
+14. Lag datastream
