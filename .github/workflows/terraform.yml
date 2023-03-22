@@ -65,7 +65,7 @@ jobs:
         run: terraform validate
 
       - name: Run 'terraform plan'
-        run: terraform plan -var-file=${{ env.VAR_FILE }}
+        run: terraform plan
 
   terraform-apply-dev:
     needs: terraform-plan-dev
