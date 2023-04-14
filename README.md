@@ -7,8 +7,9 @@ Opprettelse av bucket og bruk av denne for terraform state må gjøres i to sepa
    * BigQuery Data Owner
    * Editor
    * Secret Manager Secret Accessor
-I dette repoet er det opprettet en bruker med navn `terraform` i `tbd-dev` og `tbd-prod` med disse tilgangene. 
-   
+     
+   I dette repoet er det opprettet en bruker med navn `terraform` i `tbd-dev` og `tbd-prod` med disse tilgangene.
+
 2. Opprett key for service account og last ned
 3. Legg inn filen med service account keyen i GitHub secret (våre secrets heter GCP_SECRET_DEV og GCP_SECRET_PROD)
 4. Installer Terraform lokalt og sett miljøvariabel GOOGLE_APPLICATION_CREDENTIALS som peker til den nedlastede filen
@@ -35,28 +36,29 @@ Legg merke til bruken av denne svært interessante emojien👇
 
 ### Forutsetninger 
 Databasen man ønsker å streame til Bigquery må være klargjort. Dette innebærer:
-1. lage en databasebruker, se [her](https://github.com/navikt/helse-dataprodukter/blob/5041c1cfd9fb85fb48ea0de2e3ac3882b4e3d0b6/arbeidsgiveropplysninger/deploy/nais.yml#L35)
-2. gi den nye brukeren og den generelle databasebrukeren riktige tilganger, se [migrering V3](https://github.com/navikt/helse-dataprodukter/blob/main/arbeidsgiveropplysninger/src/main/resources/db/migration/V3__datastream_grants.sql) 
+1. Enable logical decoding, se [her](https://github.com/navikt/helse-dataprodukter/blob/5041c1cfd9fb85fb48ea0de2e3ac3882b4e3d0b6/arbeidsgiveropplysninger/deploy/nais.yml#L37)
+2. Lag en databasebruker, se [her](https://github.com/navikt/helse-dataprodukter/blob/5041c1cfd9fb85fb48ea0de2e3ac3882b4e3d0b6/arbeidsgiveropplysninger/deploy/nais.yml#L35)
+3. Gi den nye brukeren og den generelle databasebrukeren riktige tilganger, se [migrering V3](https://github.com/navikt/helse-dataprodukter/blob/main/arbeidsgiveropplysninger/src/main/resources/db/migration/V3__datastream_grants.sql)
    * NB: burde gjøres i en commit etter punktet over for å unngå race condition
-3. opprette publication og replication slots, se se [migrering V4](https://github.com/navikt/helse-dataprodukter/blob/main/arbeidsgiveropplysninger/src/main/resources/db/migration/V4__datastream_publication.sql)
-og [V5](https://github.com/navikt/helse-dataprodukter/blob/main/arbeidsgiveropplysninger/src/main/resources/db/migration/V5__datastream_replication.sql) 
+4. Opprett publication og replication slots, se [migrering V4](https://github.com/navikt/helse-dataprodukter/blob/main/arbeidsgiveropplysninger/src/main/resources/db/migration/V4__datastream_publication.sql)
+   og [V5](https://github.com/navikt/helse-dataprodukter/blob/main/arbeidsgiveropplysninger/src/main/resources/db/migration/V5__datastream_replication.sql)
 
 
-### Steg for å sette op datastream 
+### Steg for å sette opp datastream
 
 1. 🥇 Lag en VPC (Virtual Private Cloud) (f.eks. `tbd_datastream_private_vpc`)
 2. 🥇 Lag en IP-range (f.eks. `tbd_datastream_vpc_ip_range`)
-3. Gi databasen en private IP manuelt i GCP. NB. databasen får nedetid i dette steget 😱 (f.eks. `dataprodukt-arbeidsgiveropplysninger`) 
-   1. Gå til databasen i GCP 
-   2. Trykk _Edit_ 
-   3. Trykk på _Connections_ 
-   4. Huk av for _Private IP_ 
-   5. Velg nettverket du lagde i punkt 8.
+3. Gi databasen en private IP manuelt i GCP. NB. databasen får nedetid i dette steget 😱 (f.eks. `dataprodukt-arbeidsgiveropplysninger`)
+   1. Gå til databasen i GCP
+   2. Trykk _Edit_
+   3. Trykk på _Connections_
+   4. Huk av for _Private IP_
+   5. Velg VPC-en du lagde i punkt 1.
    6. Trykk _Set up connection_
    7. Trykk _Enable API_ (kun første gang per prosjekt)
-   8. Velg IP-range du lagde i punkt 9.
-   9. Trykk på _Create Connection_ 
-   10. Trykk på _Save_ 
+   8. Velg IP-range du lagde i punkt 2.
+   9. Trykk på _Create Connection_
+   10. Trykk på _Save_
 
 4. 🥇 Lag datastream private connection med vpc peering med subnet (f.eks. `tbd_datastream_private_connection`)
 5. Oppsett av firewallregler og reverse proxy, gjør en av følgende punkter: 
@@ -85,4 +87,4 @@ og [V5](https://github.com/navikt/helse-dataprodukter/blob/main/arbeidsgiveroppl
 
 
 ### Står fast? 
-* Når du legger til nye proxy instances så er det behov for å resette VM-en (den finner du på GCP: Compute Engine ➡️ VM instances ➡️ trykk på din VM ➡️ trykk på reset ➡️ prøv å kjør bygget på nytt)
+* Når du legger til nye proxy instances så er det behov for å resette VM-en (den finner du på GCP: Compute Engine ➡️ VM instances ➡️ trykk på din VM ➡️ trykk på reset)
