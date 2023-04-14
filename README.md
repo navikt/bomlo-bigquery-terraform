@@ -38,7 +38,8 @@ Databasen man ønsker å streame til Bigquery må være klargjort. Dette innebæ
 1. lage en databasebruker, se [her](https://github.com/navikt/helse-dataprodukter/blob/5041c1cfd9fb85fb48ea0de2e3ac3882b4e3d0b6/arbeidsgiveropplysninger/deploy/nais.yml#L35)
 2. gi den nye brukeren og den generelle databasebrukeren riktige tilganger, se [migrering V3](https://github.com/navikt/helse-dataprodukter/blob/main/arbeidsgiveropplysninger/src/main/resources/db/migration/V3__datastream_grants.sql) 
    * NB: burde gjøres i en commit etter punktet over for å unngå race condition
-3. opprette publication og replication slots, se [migrering V4 og V5]((https://github.com/navikt/helse-dataprodukter/tree/main/arbeidsgiveropplysninger/src/main/resources/db/migration)) 
+3. opprette publication og replication slots, se se [migrering V4](https://github.com/navikt/helse-dataprodukter/blob/main/arbeidsgiveropplysninger/src/main/resources/db/migration/V4__datastream_publication.sql)
+og [V5](https://github.com/navikt/helse-dataprodukter/blob/main/arbeidsgiveropplysninger/src/main/resources/db/migration/V5__datastream_replication.sql) 
 
 
 ### Steg for å sette op datastream 
