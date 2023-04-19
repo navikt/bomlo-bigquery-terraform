@@ -14,6 +14,13 @@ resource "google_bigquery_dataset" "arbeidsgiveropplysninger_dataset" {
     role          = "WRITER"
     special_group = "projectWriters"
   }
+  access {
+    view {
+      dataset_id = "arbeidsgiveropplysninger_metrics"
+      project_id = "helsearbeidsgiver-prod-8a1c"
+      table_id   = "varsler_og_feil"
+    }
+  }
 }
 
 resource "google_datastream_connection_profile" "arbeidsgiveropplysninger_postgresql_connection_profile" {
