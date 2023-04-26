@@ -21,6 +21,13 @@ resource "google_bigquery_dataset" "arbeidsgiveropplysninger_dataset" {
       table_id   = "varsler_og_feil"
     }
   }
+  access {
+    view {
+      dataset_id = "arbeidsgiveropplysninger_metrics"
+      project_id = "helsearbeidsgiver-prod-8a1c"
+      table_id   = "inntektsmelding_korrigeringer"
+    }
+  }
 }
 
 resource "google_datastream_connection_profile" "arbeidsgiveropplysninger_postgresql_connection_profile" {
