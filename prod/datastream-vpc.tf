@@ -46,11 +46,11 @@ resource "google_compute_firewall" "allow_datastream_to_cloud_sql" {
   source_ranges = [google_datastream_private_connection.tbd_datastream_private_connection.vpc_peering_config.0.subnet]
 }
 
-data "google_sql_database_instance" "dataprodukt_arbeidsgiveropplysninger_db"  {
+data "google_sql_database_instance" "dataprodukt_arbeidsgiveropplysninger_db" {
   name = "dataprodukt-arbeidsgiveropplysninger"
 }
 
-data "google_sql_database_instance" "dataprodukt_forstegangsbehandling_db"  {
+data "google_sql_database_instance" "dataprodukt_forstegangsbehandling_db" {
   name = "dataprodukt-forstegangsbehandling"
 }
 
