@@ -38,20 +38,26 @@ resource "google_compute_firewall" "allow_datastream_to_cloud_sql" {
   allow {
     protocol = "tcp"
     ports = [
-      var.dataprodukt_arbeidsgiveropplysninger_cloud_sql_port
+      var.dataprodukt_arbeidsgiveropplysninger_cloud_sql_port,
+      var.dataprodukt_forstegangsbehandling_cloud_sql_port
     ]
   }
 
   source_ranges = [google_datastream_private_connection.tbd_datastream_private_connection.vpc_peering_config.0.subnet]
 }
 
-data "google_sql_database_instance" "dataprodukt_arbeidsgiveropplysninger_db" {
+data "google_sql_database_instance" "dataprodukt_arbeidsgiveropplysninger_db"  {
   name = "dataprodukt-arbeidsgiveropplysninger"
+}
+
+data "google_sql_database_instance" "dataprodukt_forstegangsbehandling_db"  {
+  name = "dataprodukt-forstegangsbehandling"
 }
 
 locals {
   proxy_instances = [
     "${data.google_sql_database_instance.dataprodukt_arbeidsgiveropplysninger_db.connection_name}=tcp:0.0.0.0:${var.dataprodukt_arbeidsgiveropplysninger_cloud_sql_port}",
+    "${data.google_sql_database_instance.dataprodukt_forstegangsbehandling_db.connection_name}=tcp:0.0.0.0:${var.dataprodukt_forstegangsbehandling_cloud_sql_port}"
   ]
 }
 
