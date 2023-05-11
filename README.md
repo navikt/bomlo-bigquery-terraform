@@ -63,7 +63,7 @@ Databasen man ønsker å streame til Bigquery må være klargjort. Dette innebæ
 4. 🥇 Lag datastream private connection med vpc peering med subnet (f.eks. `tbd_datastream_private_connection`)
 5. Oppsett av firewallregler og reverse proxy, gjør en av følgende punkter: 
    * Hvis du har satt opp dette fra før må du legge til: 
-      1. Den nye databasen som proxy instance, se [her](https://github.com/navikt/bomlo-bigquery-terraform/commit/08af6cda5adfc8ee07e0d13c7a61bcfa7cdcea0f) (se bort fra det ekstra mellomrommet som snek seg inn (og fjernet i neste commit))
+      1. Den nye databasen som proxy instance, se [her](https://github.com/navikt/bomlo-bigquery-terraform/commit/08af6cda5adfc8ee07e0d13c7a61bcfa7cdcea0f) (se bort fra det ekstra mellomrommet som snek seg inn (og ble fjernet i neste commit))
       2. Ny firewall-regel som tillater connections fra databaseporten, se [her](https://github.com/navikt/bomlo-bigquery-terraform/blob/1349486438d25d890ef5a6a2a8603e1511db5377/prod/datastream-vpc.tf#L41)
    * 🥇 Hvis du ikke har satt opp firewall regler eller laget reverse proxy må dette gjøres slik som [her](https://github.com/navikt/bomlo-bigquery-terraform/commit/08f5d25cd1956cd686874247b51608031c979f85)
 
