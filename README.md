@@ -75,6 +75,11 @@ Databasen man ønsker å streame til Bigquery må være klargjort. Dette innebæ
    brew install jq
    kubectl -n tbd get secret <navnet på secret> -o json | jq ".data | map_values(@base64d)"
    ```
+
+   💡 Usikker på hva secreten din heter? Du kan liste opp secrets ved å kjøre kommandoen under og begynne å lete 🔎 Ofte starter secreten med `google`, har appnavnet i seg og slutter med en hash. 
+    ```
+    kubectl -n tbd get secrets | grep <app-navn>
+    ```
    2. Gå til Secret Manager i GCP, opprett secret, skriv følgende json: 
    ```
    {
