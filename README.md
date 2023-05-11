@@ -7,15 +7,15 @@ Opprettelse av bucket og bruk av denne for terraform state må gjøres i to sepa
    * BigQuery Data Owner
    * Editor
    * Secret Manager Secret Accessor
-     
+
    I dette repoet er det opprettet en bruker med navn `terraform` i `tbd-dev` og `tbd-prod` med disse tilgangene.
 
 2. Opprett key for service account og last ned
 3. Legg inn filen med service account keyen i GitHub secret (våre secrets heter GCP_SECRET_DEV og GCP_SECRET_PROD)
 4. Installer Terraform lokalt og sett miljøvariabel GOOGLE_APPLICATION_CREDENTIALS som peker til den nedlastede filen
-    
-    NB: Denne gir tilgang til service accounten i GCP, så den burde nok ikke beholdes lokalt, spesielt for prod
-5. Kjør kode lokalt for å opprette bucket (men ikke prøv å bruke den enda). Se kode i [commit](https://github.com/navikt/bomlo-bigquery-terraform/commit/3a6b7edb78a29052cd1e1dfae54c5ac3404768f8) 
+
+   NB: Denne gir tilgang til service accounten i GCP, så den burde nok ikke beholdes lokalt, spesielt for prod
+5. Kjør kode lokalt for å opprette bucket (men ikke prøv å bruke den enda). Se kode i [commit](https://github.com/navikt/bomlo-bigquery-terraform/commit/3a6b7edb78a29052cd1e1dfae54c5ac3404768f8)
     ```
     terraform init
     terraform plan
@@ -29,14 +29,14 @@ Opprettelse av bucket og bruk av denne for terraform state må gjøres i to sepa
 
 ## Hvordan sette opp en datastream i GCP med terraform
 
-Legg merke til bruken av denne svært interessante emojien👇 
+Legg merke til bruken av denne svært interessante emojien👇
 
 🥇: betyr at dette steget kan gjenbrukes for flere datastreams og er allerede på plass for `tbd-dev` og `tbd-prod`. Dvs. er du en bømlis så kan du mest sannynlig hoppe over dette steget!
 
 
-### Forutsetninger 
+### Forutsetninger
 Databasen man ønsker å streame til Bigquery må være klargjort. Dette innebærer:
-1. Enable logical decoding, se [her](https://github.com/navikt/helse-dataprodukter/blob/5041c1cfd9fb85fb48ea0de2e3ac3882b4e3d0b6/arbeidsgiveropplysninger/deploy/nais.yml#L37). Hvis du får problemer med å kjøre testene så trengs det muligens noen endringer i testconfigen. Prøv å legge til `"-c", "wal_level=logical"` i PostgreSQLContaineren, se [her](https://github.com/navikt/helse-dataprodukter/blob/3e4245321e3ba5bf8e221b7e7ee8581d864c9d27/arbeidsgiveropplysninger/src/test/kotlin/arbeidsgiveropplysninger/TestDatabase.kt#L18) 
+1. Enable logical decoding, se [her](https://github.com/navikt/helse-dataprodukter/blob/5041c1cfd9fb85fb48ea0de2e3ac3882b4e3d0b6/arbeidsgiveropplysninger/deploy/nais.yml#L37). Hvis du får problemer med å kjøre testene så trengs det muligens noen endringer i testconfigen. Prøv å legge til `"-c", "wal_level=logical"` i PostgreSQLContaineren, se [her](https://github.com/navikt/helse-dataprodukter/blob/3e4245321e3ba5bf8e221b7e7ee8581d864c9d27/arbeidsgiveropplysninger/src/test/kotlin/arbeidsgiveropplysninger/TestDatabase.kt#L18)
 2. Lag en databasebruker, se [her](https://github.com/navikt/helse-dataprodukter/blob/5041c1cfd9fb85fb48ea0de2e3ac3882b4e3d0b6/arbeidsgiveropplysninger/deploy/nais.yml#L35)
 3. Gi den nye brukeren og den generelle databasebrukeren riktige tilganger, se [migrering V3](https://github.com/navikt/helse-dataprodukter/blob/main/forstegangsbehandling/src/main/resources/db/migration/V3__datastream_grants.sql)
    * NB: burde gjøres i en commit etter punktet over for å unngå race condition
@@ -61,34 +61,34 @@ Databasen man ønsker å streame til Bigquery må være klargjort. Dette innebæ
    10. Trykk på _Save_
 
 4. 🥇 Lag datastream private connection med vpc peering med subnet (f.eks. `tbd_datastream_private_connection`)
-5. Oppsett av firewallregler og reverse proxy, gjør en av følgende punkter: 
-   * Hvis du har satt opp dette fra før må du legge til: 
+5. Oppsett av firewallregler og reverse proxy, gjør en av følgende punkter:
+   * Hvis du har satt opp dette fra før må du legge til:
       1. Den nye databasen som proxy instance, se [her](https://github.com/navikt/bomlo-bigquery-terraform/commit/08af6cda5adfc8ee07e0d13c7a61bcfa7cdcea0f) (se bort fra det ekstra mellomrommet som snek seg inn (og ble fjernet i neste commit))
       2. Ny firewall-regel som tillater connections fra databaseporten, se [her](https://github.com/navikt/bomlo-bigquery-terraform/blob/1349486438d25d890ef5a6a2a8603e1511db5377/prod/datastream-vpc.tf#L41)
    * 🥇 Hvis du ikke har satt opp firewall regler eller laget reverse proxy må dette gjøres slik som [her](https://github.com/navikt/bomlo-bigquery-terraform/commit/08f5d25cd1956cd686874247b51608031c979f85)
 
-    Etter å ha gjort dette må du resette proxyen, se [Stuck](#stuck)
+   Etter å ha gjort dette må du resette proxyen, se [Stuck](#stuck)
 
-6. Lag en secret i Secret Manager manuelt i GCP for brukeren du opprettet i [Forutsetninger](#Forutsetninger):  
+6. Lag en secret i Secret Manager manuelt i GCP for brukeren du opprettet i [Forutsetninger](#Forutsetninger):
    1. Hent ut brukerens passord og brukernavn fra secrets i kubernetes, dette opprettet nais automatisk da brukeren ble opprettet i `nais.yml`:
    ```
    brew install jq
    kubectl -n tbd get secret <navnet på secret> -o json | jq ".data | map_values(@base64d)"
    ```
 
-   💡 Usikker på hva secreten din heter? Du kan liste opp secrets ved å kjøre kommandoen under og begynne å lete 🔎 Ofte starter secreten med `google`, har appnavnet i seg og slutter med en hash. 
+   💡 Usikker på hva secreten din heter? Du kan liste opp secrets ved å kjøre kommandoen under og begynne å lete 🔎 Ofte starter secreten med `google`, har appnavnet i seg og slutter med en hash.
     ```
     kubectl -n tbd get secrets | grep <app-navn>
     ```
-   2. Gå til Secret Manager i GCP, opprett secret, skriv følgende json: 
+   2. Gå til Secret Manager i GCP, opprett secret, skriv følgende json:
    ```
    {
         "username": "<brukernavn fra secret>",
         "password": "<passord fra secret>"
    }
    ```
-   3. Lagre 
-7. Opprett to connection profiles, se [commit](https://github.com/navikt/bomlo-bigquery-terraform/commit/6af1542dce45ac541a670e1f07bcd3a25e98f13d): 
+   3. Lagre
+7. Opprett to connection profiles, se [commit](https://github.com/navikt/bomlo-bigquery-terraform/commit/6af1542dce45ac541a670e1f07bcd3a25e98f13d):
    1. mellom database og datastream (endringene i `datastream-dataprodukt-arbeidsgiveropplysninger.tf` og `secrets.tf` i commiten)
    2. 🥇 mellom datastream og bigquery (endringene i `datastream-vpc.tf` i commiten)
 8. Lag datastream (f.eks. `arbeidsgiveropplysninger_datastream`)
