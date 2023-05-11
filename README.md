@@ -89,8 +89,8 @@ Databasen man ønsker å streame til Bigquery må være klargjort. Dette innebæ
    ```
    3. Lagre 
 7. Opprett to connection profiles, se [commit](https://github.com/navikt/bomlo-bigquery-terraform/commit/6af1542dce45ac541a670e1f07bcd3a25e98f13d): 
-   1. mellom database og datastream 
-   2. 🥇 mellom datastream og bigquery
+   1. mellom database og datastream (endringene i `datastream-dataprodukt-arbeidsgiveropplysninger.tf` og `secrets.tf` i commiten)
+   2. 🥇 mellom datastream og bigquery (endringene i `datastream-vpc.tf` i commiten)
 8. Lag datastream (f.eks. `arbeidsgiveropplysninger_datastream`)
 
 
