@@ -39,7 +39,8 @@ resource "google_compute_firewall" "allow_datastream_to_cloud_sql" {
     protocol = "tcp"
     ports = [
       var.dataprodukt_arbeidsgiveropplysninger_cloud_sql_port,
-      var.dataprodukt_forstegangsbehandling_cloud_sql_port
+      var.dataprodukt_forstegangsbehandling_cloud_sql_port,
+      var.spaghet_cloud_sql_port
     ]
   }
 
@@ -54,10 +55,15 @@ data "google_sql_database_instance" "dataprodukt_forstegangsbehandling_db" {
   name = "dataprodukt-forstegangsbehandling"
 }
 
+data "google_sql_database_instance" "spaghet_db" {
+  name = "spaghet"
+}
+
 locals {
   proxy_instances = [
     "${data.google_sql_database_instance.dataprodukt_arbeidsgiveropplysninger_db.connection_name}=tcp:0.0.0.0:${var.dataprodukt_arbeidsgiveropplysninger_cloud_sql_port}",
-    "${data.google_sql_database_instance.dataprodukt_forstegangsbehandling_db.connection_name}=tcp:0.0.0.0:${var.dataprodukt_forstegangsbehandling_cloud_sql_port}"
+    "${data.google_sql_database_instance.dataprodukt_forstegangsbehandling_db.connection_name}=tcp:0.0.0.0:${var.dataprodukt_forstegangsbehandling_cloud_sql_port}",
+    "${data.google_sql_database_instance.spaghet_db.connection_name}=tcp:0.0.0.0:${var.spaghet_cloud_sql_port}"
   ]
 }
 

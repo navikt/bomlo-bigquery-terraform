@@ -19,3 +19,9 @@ variable "dataprodukt_forstegangsbehandling_cloud_sql_port" {
   type        = string
   default     = "5433"
 }
+
+variable "spaghet_cloud_sql_port" {
+  description = "The port exposed by the spaghet database Cloud SQL instance."
+  type        = string
+  default     = "5434"
+}
