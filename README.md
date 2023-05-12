@@ -36,12 +36,15 @@ Legg merke til bruken av denne svært interessante emojien👇
 
 ### Forutsetninger
 Databasen man ønsker å streame til Bigquery må være klargjort. Dette innebærer:
-1. Enable logical decoding, se [her](https://github.com/navikt/helse-dataprodukter/blob/5041c1cfd9fb85fb48ea0de2e3ac3882b4e3d0b6/arbeidsgiveropplysninger/deploy/nais.yml#L37). Hvis du får problemer med å kjøre testene så trengs det muligens noen endringer i testconfigen. Prøv å legge til `"-c", "wal_level=logical"` i PostgreSQLContaineren, se [her](https://github.com/navikt/helse-dataprodukter/blob/3e4245321e3ba5bf8e221b7e7ee8581d864c9d27/arbeidsgiveropplysninger/src/test/kotlin/arbeidsgiveropplysninger/TestDatabase.kt#L18)
+1. Enable logical decoding, se [her](https://github.com/navikt/helse-dataprodukter/blob/5041c1cfd9fb85fb48ea0de2e3ac3882b4e3d0b6/arbeidsgiveropplysninger/deploy/nais.yml#L37)
 2. Lag en databasebruker, se [her](https://github.com/navikt/helse-dataprodukter/blob/5041c1cfd9fb85fb48ea0de2e3ac3882b4e3d0b6/arbeidsgiveropplysninger/deploy/nais.yml#L35)
 3. Gi den nye brukeren og den generelle databasebrukeren riktige tilganger, se [migrering V3](https://github.com/navikt/helse-dataprodukter/blob/main/forstegangsbehandling/src/main/resources/db/migration/V3__datastream_grants.sql)
    * NB: burde gjøres i en commit etter punktet over for å unngå race condition
 4. Opprett publication og replication slots, se [migrering V4](https://github.com/navikt/helse-dataprodukter/blob/main/forstegangsbehandling/src/main/resources/db/migration/V4__datastream_publication.sql)
    og [V5](https://github.com/navikt/helse-dataprodukter/blob/main/forstegangsbehandling/src/main/resources/db/migration/V5__datastream_replication.sql)
+
+Hvis du får problemer med å kjøre testene så trengs det muligens noen endringer i testconfigen. Prøv å legge til
+`"-c", "wal_level=logical"` i PostgreSQLContaineren, se [her](https://github.com/navikt/helse-dataprodukter/blob/3e4245321e3ba5bf8e221b7e7ee8581d864c9d27/arbeidsgiveropplysninger/src/test/kotlin/arbeidsgiveropplysninger/TestDatabase.kt#L18)
 
 
 ### Steg for å sette opp datastream
