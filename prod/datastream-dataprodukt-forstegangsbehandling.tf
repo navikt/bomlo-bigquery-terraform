@@ -49,8 +49,8 @@ resource "google_datastream_stream" "forstegangsbehandling_datastream" {
 
     postgresql_source_config {
       max_concurrent_backfill_tasks = 0
-      publication                   = "dataprodukter_forstegangsbehandling_publication"
-      replication_slot              = "dataprodukter_forstegangsbehandling_replication"
+      publication                   = "dataprodukt_forstegangsbehandling_publication"
+      replication_slot              = "dataprodukt_forstegangsbehandling_replication"
 
       include_objects {
         postgresql_schemas {
