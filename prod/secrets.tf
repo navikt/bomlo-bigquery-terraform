@@ -7,7 +7,7 @@ data "google_secret_manager_secret_version" "forstegangsbehandling_datastream_us
 }
 
 data "google_secret_manager_secret_version" "spaghet_datastream_user_secret" {
-  secret = "spaghet_user_secret"
+  secret = "spaghet_datastream_user_secret"
 }
 
 locals {
