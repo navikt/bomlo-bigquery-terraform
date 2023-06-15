@@ -63,3 +63,26 @@ resource "google_project_iam_member" "styringsinformasjon_data_viewer" {
   role    = "roles/bigquery.dataViewer"
   member  = "serviceAccount:${google_service_account.styringsinformasjon_bigquery.email}"
 }
+
+module "hvilepuls_scheduled_query_poc" {
+  source  = "terraform-google-modules/bigquery/google//modules/scheduled_queries"
+  version = "6.0.0"
+
+  project_id = var.gcp_project["project"]
+
+  queries = [
+    {
+      name                   = "hvilepuls-scheduled-query-poc"
+      location               = var.gcp_project["region"]
+      data_source_id         = "scheduled_query"
+      destination_dataset_id = google_bigquery_dataset.hvilepuls_dataset.dataset_id
+      schedule               = "every hour"
+      service_account_name   = google_service_account.styringsinformasjon_bigquery.email
+      params = {
+        destination_table_name_template = "hvilepuls_poc_aggregert"
+        write_disposition               = "WRITE_TRUNCATE"
+        query                           = "SELECT (dato), count(dato) as antall FROM `${google_bigquery_table.hvilepulse_table.table_id}` GROUP BY dato;"
+      }
+    }
+  ]
+}
