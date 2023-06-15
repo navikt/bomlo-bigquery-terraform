@@ -18,3 +18,24 @@ resource "google_bigquery_dataset" "hvilepuls_dataset" {
   }
   timeouts {}
 }
+
+resource "google_bigquery_table" "hvilepulse_table" {
+  dataset_id = google_bigquery_dataset.hvilepuls_dataset.dataset_id
+  table_id   = "hvilepuls_poc"
+  schema = jsonencode(
+    [
+      {
+        mode = "NULLABLE"
+        name = "dato"
+        type = "DATE"
+      },
+      {
+        mode = "NULLABLE"
+        name = "verdi"
+        type = "INTEGER"
+      }
+    ]
+  )
+
+  deletion_protection = false
+}
