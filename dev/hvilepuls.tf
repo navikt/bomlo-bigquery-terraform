@@ -1,4 +1,4 @@
-resource "google_bigquery_dataset" "flex_dataset" {
+resource "google_bigquery_dataset" "hvilepuls_dataset" {
   dataset_id    = "hvilepuls"
   location      = var.gcp_project["region"]
   friendly_name = "hvilepuls"
