@@ -39,3 +39,27 @@ resource "google_bigquery_table" "hvilepulse_table" {
 
   deletion_protection = false
 }
+
+resource "google_service_account" "styringsinformasjon_bigquery" {
+  account_id   = "styringsinformasjon-bigquery"
+  description  = "Service Account brukt av Team Hvilepuls for Scheduled Queries."
+  display_name = "Hvilepuls Scheduled Query"
+}
+
+resource "google_project_iam_member" "styringsinformasjon_data_editor" {
+  project = data.google_project.project.project_id
+  role    = "roles/bigquery.dataEditor"
+  member  = "serviceAccount:${google_service_account.styringsinformasjon_bigquery.email}"
+}
+
+resource "google_project_iam_member" "styringsinformasjon_job_user" {
+  project = data.google_project.project.project_id
+  role    = "roles/bigquery.jobUser"
+  member  = "serviceAccount:${google_service_account.styringsinformasjon_bigquery.email}"
+}
+
+resource "google_project_iam_member" "styringsinformasjon_data_viewer" {
+  project = data.google_project.project.project_id
+  role    = "roles/bigquery.dataViewer"
+  member  = "serviceAccount:${google_service_account.styringsinformasjon_bigquery.email}"
+}
