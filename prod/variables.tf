@@ -25,3 +25,9 @@ variable "spaghet_cloud_sql_port" {
   type        = string
   default     = "5434"
 }
+
+variable "spre_styringsinfo_cloud_sql_port" {
+  description = "The port exposed by the spre-styringsinfo database Cloud SQL instance."
+  type        = string
+  default     = "5435"
+}
