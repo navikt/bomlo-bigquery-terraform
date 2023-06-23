@@ -69,7 +69,7 @@ locals {
     "${data.google_sql_database_instance.dataprodukt_arbeidsgiveropplysninger_db.connection_name}=tcp:0.0.0.0:${var.dataprodukt_arbeidsgiveropplysninger_cloud_sql_port}",
     "${data.google_sql_database_instance.dataprodukt_forstegangsbehandling_db.connection_name}=tcp:0.0.0.0:${var.dataprodukt_forstegangsbehandling_cloud_sql_port}",
     "${data.google_sql_database_instance.spaghet_db.connection_name}=tcp:0.0.0.0:${var.spaghet_cloud_sql_port}",
-    "${data.google_sql_database_instance.spre_styringsinfo_db.connection_name}=tcp:0.0.0.0:${var.spaghet_cloud_sql_port}"
+    "${data.google_sql_database_instance.spre_styringsinfo_db.connection_name}=tcp:0.0.0.0:${var.spre_styringsinfo_cloud_sql_port}"
   ]
 }
 
