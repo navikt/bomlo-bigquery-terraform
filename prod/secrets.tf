@@ -10,6 +10,10 @@ data "google_secret_manager_secret_version" "spaghet_datastream_user_secret" {
   secret = "spaghet_datastream_user_secret"
 }
 
+data "google_secret_manager_secret_version" "spre_styringsinfo_datastream_user_secret" {
+  secret = "spre_styringsinfo_datastream_user_secret"
+}
+
 locals {
   dataprodukt_arbeidsgiveropplysninger_db_credentials = jsondecode(
     data.google_secret_manager_secret_version.arbeidsgiveropplysninger_datastream_user_secret.secret_data
@@ -25,5 +29,11 @@ locals {
 locals {
   spaghet_db_credentials = jsondecode(
     data.google_secret_manager_secret_version.spaghet_datastream_user_secret.secret_data
+  )
+}
+
+locals {
+  spre_styringsinfo_db_credentials = jsondecode(
+    data.google_secret_manager_secret_version.spre_styringsinfo_datastream_user_secret.secret_data
   )
 }
