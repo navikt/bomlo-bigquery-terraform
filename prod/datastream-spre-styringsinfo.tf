@@ -19,70 +19,70 @@ resource "google_bigquery_dataset" "spre_styringsinfo_dataset" {
   timeouts {}
 }
 
-#resource "google_datastream_connection_profile" "spre_styringsinfo_postgresql_connection_profile" {
-#  location              = var.gcp_project["region"]
-#  display_name          = "spre-styringsinfo-postgresql-connection-profile"
-#  connection_profile_id = "spre-styringsinfo-postgresql-connection-profile"
-#
-#  postgresql_profile {
-#    hostname = google_compute_instance.tbd_datastream_cloud_sql_proxy_vm.network_interface[0].network_ip
-#    port     = var.spre_styringsinfo_cloud_sql_port
-#    username = local.spre_styringsinfo_db_credentials["username"]
-#    password = local.spre_styringsinfo_db_credentials["password"]
-#    database = "spre-styringsinfo"
-#  }
-#
-#  private_connectivity {
-#    private_connection = google_datastream_private_connection.tbd_datastream_private_connection.id
-#  }
-#}
+resource "google_datastream_connection_profile" "spre_styringsinfo_postgresql_connection_profile" {
+  location              = var.gcp_project["region"]
+  display_name          = "spre-styringsinfo-postgresql-connection-profile"
+  connection_profile_id = "spre-styringsinfo-postgresql-connection-profile"
 
-#resource "google_datastream_stream" "spre_styringsinfo_datastream" {
-#  stream_id     = "spre_styringsinfo-datastream"
-#  display_name  = "spre_styringsinfo-datastream"
-#  desired_state = "RUNNING"
-#  project       = var.gcp_project["project"]
-#  location      = var.gcp_project["region"]
-#  labels        = {}
-#  backfill_all {}
-#  timeouts {}
-#
-#  source_config {
-#    source_connection_profile = google_datastream_connection_profile.spre_styringsinfo_postgresql_connection_profile.id
-#
-#    postgresql_source_config {
-#      max_concurrent_backfill_tasks = 0
-#      publication                   = "spre_styringsinfo_publication"
-#      replication_slot              = "spre_styringsinfo_replication"
-#
-#      exclude_objects {
-#        postgresql_schemas {
-#          schema = "public"
-#
-#          postgresql_tables {
-#            table = "flyway_schema_history"
-#          }
-#        }
-#      }
-#
-#      include_objects {
-#        postgresql_schemas {
-#          schema = "public"
-#        }
-#      }
-#    }
-#  }
-#
-#  destination_config {
-#    destination_connection_profile = google_datastream_connection_profile.datastream_bigquery_connection_profile.id
-#
-#    bigquery_destination_config {
-#      data_freshness = "3600s"
-#
-#      single_target_dataset {
-#        dataset_id = "${var.gcp_project["project"]}:${google_bigquery_dataset.spre_styringsinfo_dataset.dataset_id}"
-#      }
-#    }
-#  }
-#}
+  postgresql_profile {
+    hostname = google_compute_instance.tbd_datastream_cloud_sql_proxy_vm.network_interface[0].network_ip
+    port     = var.spre_styringsinfo_cloud_sql_port
+    username = local.spre_styringsinfo_db_credentials["username"]
+    password = local.spre_styringsinfo_db_credentials["password"]
+    database = "spre-styringsinfo"
+  }
+
+  private_connectivity {
+    private_connection = google_datastream_private_connection.tbd_datastream_private_connection.id
+  }
+}
+
+resource "google_datastream_stream" "spre_styringsinfo_datastream" {
+  stream_id     = "spre_styringsinfo-datastream"
+  display_name  = "spre_styringsinfo-datastream"
+  desired_state = "RUNNING"
+  project       = var.gcp_project["project"]
+  location      = var.gcp_project["region"]
+  labels        = {}
+  backfill_all {}
+  timeouts {}
+
+  source_config {
+    source_connection_profile = google_datastream_connection_profile.spre_styringsinfo_postgresql_connection_profile.id
+
+    postgresql_source_config {
+      max_concurrent_backfill_tasks = 0
+      publication                   = "spre_styringsinfo_publication"
+      replication_slot              = "spre_styringsinfo_replication"
+
+      exclude_objects {
+        postgresql_schemas {
+          schema = "public"
+
+          postgresql_tables {
+            table = "flyway_schema_history"
+          }
+        }
+      }
+
+      include_objects {
+        postgresql_schemas {
+          schema = "public"
+        }
+      }
+    }
+  }
+
+  destination_config {
+    destination_connection_profile = google_datastream_connection_profile.datastream_bigquery_connection_profile.id
+
+    bigquery_destination_config {
+      data_freshness = "3600s"
+
+      single_target_dataset {
+        dataset_id = "${var.gcp_project["project"]}:${google_bigquery_dataset.spre_styringsinfo_dataset.dataset_id}"
+      }
+    }
+  }
+}
 
