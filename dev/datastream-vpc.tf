@@ -37,10 +37,7 @@ resource "google_compute_firewall" "allow_datastream_to_cloud_sql" {
 
   allow {
     protocol = "tcp"
-    ports = [
-      var.dataprodukt_arbeidsgiveropplysninger_cloud_sql_port,
-      var.spre_styringsinfo_cloud_sql_port,
-    ]
+    ports = []
   }
 
   source_ranges = [google_datastream_private_connection.tbd_datastream_private_connection.vpc_peering_config.0.subnet]
@@ -55,10 +52,7 @@ data "google_sql_database_instance" "spre_styringsinfo_db" {
 }
 
 locals {
-  proxy_instances = [
-    "${data.google_sql_database_instance.dataprodukt_arbeidsgiveropplysninger_db.connection_name}=tcp:0.0.0.0:${var.dataprodukt_arbeidsgiveropplysninger_cloud_sql_port}",
-    "${data.google_sql_database_instance.spre_styringsinfo_db.connection_name}=tcp:0.0.0.0:${var.spre_styringsinfo_cloud_sql_port}",
-  ]
+  proxy_instances = []
 }
 
 // This module handles the generation of metadata used to create an instance used to host containers on GCE.
