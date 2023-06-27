@@ -38,8 +38,8 @@ resource "google_datastream_connection_profile" "spre_styringsinfo_postgresql_co
 }
 
 resource "google_datastream_stream" "spre_styringsinfo_datastream" {
-  stream_id     = "spre_styringsinfo-datastream"
-  display_name  = "spre_styringsinfo-datastream"
+  stream_id     = "spre-styringsinfo-datastream"
+  display_name  = "spre-styringsinfo-datastream"
   desired_state = "RUNNING"
   project       = var.gcp_project["project"]
   location      = var.gcp_project["region"]
