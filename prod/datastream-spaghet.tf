@@ -63,6 +63,10 @@ resource "google_datastream_stream" "spaghet_datastream" {
           postgresql_tables {
             table = "funksjonell_feil"
           }
+
+          postgresql_tables {
+            table = "regelverksvarsel"
+          }
         }
       }
     }
