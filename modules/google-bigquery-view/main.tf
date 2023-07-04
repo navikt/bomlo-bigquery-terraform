@@ -3,6 +3,7 @@ resource "google_bigquery_table" "view" {
   table_id            = var.view_id
   schema              = var.view_schema
   deletion_protection = var.deletion_protection
+  description         = var.view_description
 
   view {
     use_legacy_sql = false

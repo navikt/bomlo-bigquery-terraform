@@ -23,3 +23,8 @@ variable "view_query" {
   description = "The SQL used to populate the view."
   type        = string
 }
+
+variable "view_description" {
+  description = "The SQL used to populate the view."
+  type        = string
+}
