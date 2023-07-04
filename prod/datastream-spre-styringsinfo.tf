@@ -16,6 +16,13 @@ resource "google_bigquery_dataset" "spre_styringsinfo_dataset" {
     role          = "WRITER"
     special_group = "projectWriters"
   }
+  access {
+    view {
+      dataset_id = "styringsinfo_dataset"
+      project_id = var.gcp_project["project"]
+      table_id   = "styringsinfo_sendt_soknad_view"
+    }
+  }
   timeouts {}
 }
 
