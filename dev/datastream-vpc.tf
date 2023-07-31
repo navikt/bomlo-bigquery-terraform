@@ -58,11 +58,13 @@ locals {
 // This module handles the generation of metadata used to create an instance used to host containers on GCE.
 // The module itself does not launch an instance or managed instance group.
 module "cloud_sql_auth_proxy_container_datastream" {
+  // https://endoflife.date/cos
   source         = "terraform-google-modules/container-vm/google"
   version        = "3.1.0"
-  cos_image_name = "cos-stable-101-17162-127-8"
+  cos_image_name = "cos-101-17162-210-44"
   container = {
-    image   = "eu.gcr.io/cloudsql-docker/gce-proxy:1.33.2"
+    // https://console.cloud.google.com/gcr/images/cloudsql-docker/EU/gce-proxy
+    image   = "eu.gcr.io/cloudsql-docker/gce-proxy:1.33.8"
     command = ["/cloud_sql_proxy"]
     args = [
       "-instances=${join(",", local.proxy_instances)}",
