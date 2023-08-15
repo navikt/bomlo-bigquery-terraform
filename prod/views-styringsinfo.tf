@@ -111,3 +111,43 @@ SELECT
 FROM `${var.gcp_project["project"]}.${google_bigquery_dataset.spre_styringsinfo_dataset.dataset_id}.public_vedtak_fattet`
 EOF
 }
+
+module "styringsinfo_vedtak_forkastet_view" {
+  source              = "../modules/google-bigquery-view"
+  deletion_protection = false
+  dataset_id          = google_bigquery_dataset.styringsinfo_dataset.dataset_id
+  view_id             = "styringsinfo_vedtak_forkastet_view"
+  view_description    = "Basert på vedtak_forkastet-hendelser på tbd.rapid.v1."
+  view_schema = jsonencode(
+    [
+      {
+        name        = "syntetisk_id"
+        type        = "STRING"
+        description = "Syntetisk id tildelt ved lagring av hendelser i spre-styringsinfo."
+      },
+      {
+        name        = "hendelse_id"
+        type        = "STRING"
+        description = "Intern id laget når hendelsen legges på tbd.rapid.v1"
+      },
+      {
+        name        = "vedtaksperiode_id"
+        type        = "STRING"
+        description = "Vedtaksperioden som hendelsen refererer til."
+      },
+      {
+        name        = "vedtak_forkastet"
+        type        = "TIMESTAMP"
+        description = "Tidspunktet vedtaket ble forkastet."
+      }
+    ]
+  )
+  view_query = <<EOF
+SELECT
+    id AS syntetisk_id,
+    hendelse_id,
+    JSON_EXTRACT_SCALAR(melding, '$.vedtaksperiodeId') AS vedtaksperiode_id,
+    forkastet_tidspunkt AS vedtak_forkastet
+FROM `${var.gcp_project["project"]}.${google_bigquery_dataset.spre_styringsinfo_dataset.dataset_id}.public_vedtak_forkastet`
+EOF
+}
