@@ -186,7 +186,7 @@ module "styringsinfo_vedtak_tidsbruk" {
         description = "Absolutt antall dager forløpt fra søknad mottatt til vedtak fattet. Om dette er 0 ble vedtaket fattet innen 24 timer fra vi mottok søknaden."
       },
       {
-        name        = "time_brukt"
+        name        = "timer_brukt"
         type        = "INT64"
         description = "Absolutt antall timer forløpt fra søknad mottatt til vedtak fattet. Om dette er 0 ble vedtaket fattet innen 60 minutter fra vi mottok søknaden."
       }
