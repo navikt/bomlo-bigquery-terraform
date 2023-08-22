@@ -179,21 +179,36 @@ module "styringsinfo_vedtak_tidsbruk" {
         name        = "dager"
         type        = "INT64"
         description = "Antall dager mellom søknad ble mottatt og vedtak ble fattet. Mellom 0 og 30"
+      },
+      {
+        name        = "dager_brukt"
+        type        = "INT64"
+        description = "Absolutt antall dager forløpt fra søknad mottatt til vedtak fattet. Om dette er 0 ble vedtaket fattet innen 24 timer fra vi mottok søknaden."
+      },
+      {
+        name        = "dager"
+        type        = "INT64"
+        description = "Absolutt antall timer forløpt fra søknad mottatt til vedtak fattet. Om dette er 0 ble vedtaket fattet innen 60 minutter fra vi mottok søknaden."
       }
     ]
   )
   view_query = <<EOF
 with tidsbruk as (
-select sso.sendt as soknad_sendt, vfa.vedtak_fattet_tidspunkt as vedtak_fattet, JUSTIFY_INTERVAL(vfa.vedtak_fattet_tidspunkt - sso.sendt) as tid
-from 
-  `${var.gcp_project["project"]}.${google_bigquery_dataset.spre_styringsinfo_dataset.dataset_id}.public_vedtak_fattet` vfa, 
+ select sso.sendt as soknad_sendt, vfa.vedtak_fattet_tidspunkt as vedtak_fattet,
+ JUSTIFY_INTERVAL(vfa.vedtak_fattet_tidspunkt - sso.sendt) as tid,
+ date_diff(vfa.vedtak_fattet_tidspunkt, sso.sendt, day) as dager_brukt,
+ date_diff(vfa.vedtak_fattet_tidspunkt, sso.sendt, hour) as timer_brukt
+from
+  `${var.gcp_project["project"]}.${google_bigquery_dataset.spre_styringsinfo_dataset.dataset_id}.public_vedtak_fattet` vfa,
   `${var.gcp_project["project"]}.${google_bigquery_dataset.spre_styringsinfo_dataset.dataset_id}.public_vedtak_dokument_mapping` vdm,
   `${var.gcp_project["project"]}.${google_bigquery_dataset.spre_styringsinfo_dataset.dataset_id}.public_sendt_soknad` sso
 where vfa.hendelse_id=vdm.vedtak_hendelse_id and sso.hendelse_id=vdm.dokument_hendelse_id)
-select date(tidsbruk.vedtak_fattet) as vedtak_fattet_dato, 
+select date(tidsbruk.vedtak_fattet) as vedtak_fattet_dato,
   extract(YEAR from tid) AS aar,
   extract(MONTH from tid) AS maaneder,
   extract(DAY from tid) AS dager,
+  dager_brukt,
+  timer_brukt
 from tidsbruk
 EOF
 }
