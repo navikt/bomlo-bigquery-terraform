@@ -151,3 +151,49 @@ SELECT
 FROM `${var.gcp_project["project"]}.${google_bigquery_dataset.spre_styringsinfo_dataset.dataset_id}.public_vedtak_forkastet`
 EOF
 }
+
+module "styringsinfo_vedtak_tidsbruk" {
+  source              = "../modules/google-bigquery-view"
+  deletion_protection = false
+  dataset_id          = google_bigquery_dataset.styringsinfo_dataset.dataset_id
+  view_id             = "styringsinfo_vedtak_tidsbruk"
+  view_description    = "Beregner tidsbruk fra søknad er mottatt til vedtak er fattet"
+  view_schema = jsonencode(
+    [
+      {
+        name        = "vedtak_fattet_dato"
+        type        = "DATE"
+        description = "Dato for når vedtaket ble fattet"
+      },
+      {
+        name        = "aar"
+        type        = "INT64"
+        description = "Antall år mellom søknad ble mottatt og vedtak ble fattet. Om denne blir større enn 0 er vi i trøbbel"
+      },
+      {
+        name        = "maaneder"
+        type        = "INT64"
+        description = "Antall måneder mellom søknad ble mottatt og vedtak ble fattet. Mellom 0 og 12"
+      },
+      {
+        name        = "dager"
+        type        = "INT64"
+        description = "Antall dager mellom søknad ble mottatt og vedtak ble fattet. Mellom 0 og 30"
+      }
+    ]
+  )
+  view_query = <<EOF
+with tidsbruk as (
+select sso.sendt as soknad_sendt, vfa.vedtak_fattet_tidspunkt as vedtak_fattet, JUSTIFY_INTERVAL(vfa.vedtak_fattet_tidspunkt - sso.sendt) as tid
+from
+  `${var.gcp_project["project"]}.${google_bigquery_dataset.spre_styringsinfo_dataset.dataset_id}.public_vedtak_fattet` vfa,
+  `${var.gcp_project["project"]}.${google_bigquery_dataset.spre_styringsinfo_dataset.dataset_id}.public_vedtak_dokument_mapping` vdm,
+  `${var.gcp_project["project"]}.${google_bigquery_dataset.spre_styringsinfo_dataset.dataset_id}.public_sendt_soknad` sso
+where vfa.hendelse_id=vdm.vedtak_hendelse_id and sso.hendelse_id=vdm.dokument_hendelse_id)
+select date(tidsbruk.vedtak_fattet) as vedtak_fattet_dato,
+  extract(YEAR from tid) AS aar,
+  extract(MONTH from tid) AS maaneder,
+  extract(DAY from tid) AS dager,
+from tidsbruk
+EOF
+}
