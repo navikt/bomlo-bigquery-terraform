@@ -212,3 +212,34 @@ select date(tidsbruk.vedtak_fattet) as vedtak_fattet_dato,
 from tidsbruk
 EOF
 }
+
+module "styringsinfo_datakvalitet_soknadhendelser_view" {
+  source              = "../modules/google-bigquery-view"
+  deletion_protection = false
+  dataset_id          = google_bigquery_dataset.styringsinfo_dataset.dataset_id
+  view_id             = "styringsinfo_datakvalitet_soknadhendelser_view"
+  view_description    = "Datakvalitetsview for søknadshendelser."
+  view_schema = jsonencode(
+    [
+      {
+        name        = "diff_soknadhendelser"
+        type        = "INTEGER"
+        description = "Diff i antall søknadshendelser mellom flex og styringsinfo for i går."
+      }
+    ]
+  )
+  view_query = <<EOF
+SELECT (SELECT COUNT(*)
+        FROM `flex-prod-af40.flex_dataset.sykepengesoknad_sykepengesoknad_view`
+        WHERE sendt IS NOT NULL
+          AND DATE(sendt, 'Europe/Oslo') = DATE_SUB(CURRENT_DATE('Europe/Oslo'), INTERVAL 1 DAY)
+          AND soknadstype = 'ARBEIDSTAKERE'
+        ) - (
+        SELECT COUNT(*)
+        FROM `${var.gcp_project["project"]}.${google_bigquery_dataset.styringsinfo_dataset.dataset_id}.styringsinfo_sendt_soknad_view`
+        WHERE soknad_mottatt IS NOT NULL
+          AND DATE(soknad_mottatt, 'Europe/Oslo') = DATE_SUB(CURRENT_DATE('Europe/Oslo'), INTERVAL 1 DAY)
+        )
+AS diff_soknadhendelser
+EOF
+}
