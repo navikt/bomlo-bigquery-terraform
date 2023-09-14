@@ -51,7 +51,7 @@ module "styringsinfo_sendt_soknad_view" {
       {
         name        = "korrigerende"
         type        = "BOOLEAN"
-        description = "Korrigererer søknaden en tidligere søknad?"
+        description = "Korrigerer søknaden en tidligere søknad?"
       },
       {
         name        = "soknad_mottatt"
