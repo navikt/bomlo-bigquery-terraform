@@ -49,6 +49,11 @@ module "styringsinfo_sendt_soknad_view" {
         description = "Dokument-id til tidligere innsendt søknad denne søknaden korrigerer."
       },
       {
+        name        = "korrigerende"
+        type        = "BOOLEAN"
+        description = "Korrigerer søknaden en tidligere søknad?"
+      },
+      {
         name        = "soknad_mottatt"
         type        = "TIMESTAMP"
         description = "Tidspunktet bruker sendte søknaden til arbeidsgiver eller NAV første gang."
@@ -61,6 +66,7 @@ SELECT
     hendelse_id,
     JSON_EXTRACT_SCALAR(melding, '$.id') AS soknad_id,
     korrigerer AS korrigerer_soknad_id,
+    korrigerer IS NOT NULL AS korrigerende,
     sendt AS soknad_mottatt
 FROM `${var.gcp_project["project"]}.${google_bigquery_dataset.spre_styringsinfo_dataset.dataset_id}.public_sendt_soknad`
 EOF
