@@ -32,31 +32,37 @@ module "styringsinfo_sendt_soknad_view" {
         name        = "syntetisk_id"
         type        = "STRING"
         description = "Syntetisk id tildelt ved lagring av hendelser i spre-styringsinfo."
+        mode        = "NULLABLE"
       },
       {
         name        = "hendelse_id"
         type        = "STRING"
         description = "Intern id laget når hendelsen legges på tbd.rapid.v1"
+        mode        = "NULLABLE"
       },
       {
         name        = "soknad_id"
         type        = "STRING"
         description = "Dokument-id (sykepengesøknad id fra Team Flex) til søknaden som hendelsen refererer til."
+        mode        = "NULLABLE"
       },
       {
         name        = "korrigerer_soknad_id"
         type        = "STRING"
         description = "Dokument-id til tidligere innsendt søknad denne søknaden korrigerer."
+        mode        = "NULLABLE"
       },
       {
         name        = "korrigerende"
         type        = "BOOLEAN"
         description = "Korrigerer søknaden en tidligere søknad?"
+        mode        = "NULLABLE"
       },
       {
         name        = "soknad_mottatt"
         type        = "TIMESTAMP"
         description = "Tidspunktet bruker sendte søknaden til arbeidsgiver eller NAV første gang."
+        mode        = "NULLABLE"
       }
     ]
   )
@@ -84,26 +90,31 @@ module "styringsinfo_vedtak_fattet_view" {
         name        = "syntetisk_id"
         type        = "STRING"
         description = "Syntetisk id tildelt ved lagring av hendelser i spre-styringsinfo."
+        mode        = "NULLABLE"
       },
       {
         name        = "hendelse_id"
         type        = "STRING"
         description = "Intern id laget når hendelsen legges på tbd.rapid.v1"
+        mode        = "NULLABLE"
       },
       {
         name        = "vedtaksperiode_id"
         type        = "STRING"
         description = "Vedtaksperioden som hendelsen refererer til."
+        mode        = "NULLABLE"
       },
       {
         name        = "utbetaling_id"
         type        = "STRING"
         description = "Eventuell utbetaling som vedtaket bidrar til."
+        mode        = "NULLABLE"
       },
       {
         name        = "vedtak_fattet"
         type        = "TIMESTAMP"
         description = "Tidspunktet vedtaket ble fattet."
+        mode        = "NULLABLE"
       }
     ]
   )
@@ -130,21 +141,25 @@ module "styringsinfo_vedtak_forkastet_view" {
         name        = "syntetisk_id"
         type        = "STRING"
         description = "Syntetisk id tildelt ved lagring av hendelser i spre-styringsinfo."
+        mode        = "NULLABLE"
       },
       {
         name        = "hendelse_id"
         type        = "STRING"
         description = "Intern id laget når hendelsen legges på tbd.rapid.v1"
+        mode        = "NULLABLE"
       },
       {
         name        = "vedtaksperiode_id"
         type        = "STRING"
         description = "Vedtaksperioden som hendelsen refererer til."
+        mode        = "NULLABLE"
       },
       {
         name        = "vedtak_forkastet"
         type        = "TIMESTAMP"
         description = "Tidspunktet vedtaket ble forkastet."
+        mode        = "NULLABLE"
       }
     ]
   )
@@ -170,31 +185,37 @@ module "styringsinfo_vedtak_tidsbruk" {
         name        = "vedtak_fattet_dato"
         type        = "DATE"
         description = "Dato for når vedtaket ble fattet"
+        mode        = "NULLABLE"
       },
       {
         name        = "aar"
         type        = "INT64"
         description = "Antall år mellom søknad ble mottatt og vedtak ble fattet. Om denne blir større enn 0 er vi i trøbbel"
+        mode        = "NULLABLE"
       },
       {
         name        = "maaneder"
         type        = "INT64"
         description = "Antall måneder mellom søknad ble mottatt og vedtak ble fattet. Mellom 0 og 12"
+        mode        = "NULLABLE"
       },
       {
         name        = "dager"
         type        = "INT64"
         description = "Antall dager mellom søknad ble mottatt og vedtak ble fattet. Mellom 0 og 30"
+        mode        = "NULLABLE"
       },
       {
         name        = "dager_brukt"
         type        = "INT64"
         description = "Absolutt antall dager forløpt fra søknad mottatt til vedtak fattet. Om dette er 0 ble vedtaket fattet innen 24 timer fra vi mottok søknaden."
+        mode        = "NULLABLE"
       },
       {
         name        = "timer_brukt"
         type        = "INT64"
         description = "Absolutt antall timer forløpt fra søknad mottatt til vedtak fattet. Om dette er 0 ble vedtaket fattet innen 60 minutter fra vi mottok søknaden."
+        mode        = "NULLABLE"
       }
     ]
   )
