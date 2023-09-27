@@ -69,6 +69,27 @@ resource "google_datastream_stream" "spre_styringsinfo_datastream" {
           postgresql_tables {
             table = "flyway_schema_history"
           }
+
+          postgresql_tables {
+            table = "sendt_soknad"
+            postgresql_columns {
+              column = "patch_level"
+            }
+          }
+
+          postgresql_tables {
+            table = "vedtak_fattet"
+            postgresql_columns {
+              column = "patch_level"
+            }
+          }
+
+          postgresql_tables {
+            table = "vedtak_forkastet"
+            postgresql_columns {
+              column = "patch_level"
+            }
+          }
         }
       }
 
