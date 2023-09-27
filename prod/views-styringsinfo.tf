@@ -235,7 +235,7 @@ select
   date_diff(vfa.vedtak_fattet, sso.sendt, day) as dager_brukt,
   date_diff(vfa.vedtak_fattet, sso.sendt, hour) as timer_brukt
 from
-  `${var.gcp_project["project"]}.${google_bigquery_dataset.spre_styringsinfo_dataset.dataset_id}.styringsinfo_vedtak_fattet_view` vfa,
+  `${var.gcp_project["project"]}.${google_bigquery_dataset.styringsinfo_dataset.dataset_id}.styringsinfo_vedtak_fattet_view` vfa,
   `${var.gcp_project["project"]}.${google_bigquery_dataset.spre_styringsinfo_dataset.dataset_id}.public_vedtak_dokument_mapping` vdm,
   `${var.gcp_project["project"]}.${google_bigquery_dataset.spre_styringsinfo_dataset.dataset_id}.public_sendt_soknad` sso
 where vfa.hendelse_id=vdm.vedtak_hendelse_id and sso.hendelse_id=vdm.dokument_hendelse_id)
