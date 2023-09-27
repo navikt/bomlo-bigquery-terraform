@@ -191,7 +191,7 @@ module "styringsinfo_vedtak_tidsbruk" {
         name        = "har_utbetaling"
         type        = "BOOLEAN"
         description = "Om vedtaket har en utbetaling knyttet til seg"
-        mode        = "REQUIRED"
+        mode        = "NULLABLE"
       },
       {
         name        = "aar"
