@@ -71,10 +71,6 @@ resource "google_datastream_stream" "spre_styringsinfo_datastream" {
           }
 
           postgresql_tables {
-            table = "vedtak_dokument_mapping"
-          }
-
-          postgresql_tables {
             table = "sendt_soknad"
             postgresql_columns {
               column = "patch_level"
