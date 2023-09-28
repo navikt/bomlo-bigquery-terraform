@@ -178,7 +178,7 @@ module "styringsinfo_vedtak_tidsbruk" {
   deletion_protection = false
   dataset_id          = google_bigquery_dataset.styringsinfo_dataset.dataset_id
   view_id             = "styringsinfo_vedtak_tidsbruk"
-  view_description    = "Beregner tidsbruk fra søknad er mottatt til vedtak er fattet"
+  view_description    = "Beregner tidsbruk fra søknad er mottatt til vedtak er fattet for den sist sendte søknaden som inngikk i vedtaket."
   view_schema = jsonencode(
     [
       {
@@ -233,7 +233,8 @@ select
   vfa.utbetaling_id is not null as har_utbetaling,
   JUSTIFY_INTERVAL(vfa.vedtak_fattet - sso.sendt) as tid,
   date_diff(vfa.vedtak_fattet, sso.sendt, day) as dager_brukt,
-  date_diff(vfa.vedtak_fattet, sso.sendt, hour) as timer_brukt
+  date_diff(vfa.vedtak_fattet, sso.sendt, hour) as timer_brukt,
+  ROW_NUMBER() OVER (PARTITION BY vfa.hendelse_id ORDER BY sso.sendt DESC) as rangering --siste søknad har rangering 1
 from
   `${var.gcp_project["project"]}.${google_bigquery_dataset.styringsinfo_dataset.dataset_id}.styringsinfo_vedtak_fattet_view` vfa,
   `${var.gcp_project["project"]}.${google_bigquery_dataset.spre_styringsinfo_dataset.dataset_id}.public_vedtak_dokument_mapping` vdm,
@@ -248,6 +249,7 @@ select
   dager_brukt,
   timer_brukt
 from tidsbruk
+where rangering = 1
 EOF
 }
 
