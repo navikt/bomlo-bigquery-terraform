@@ -130,11 +130,11 @@ EOF
 }
 
 module "styringsinfo_vedtak_fattet_mangler_soknad_view" {
-  source = "../modules/google-bigquery-view"
+  source              = "../modules/google-bigquery-view"
   deletion_protection = false
-  dataset_id = google_bigquery_dataset.styringsinfo_dataset.dataset_id
-  view_description = "Basert på vedtak_fattet-hendelser på tbd.rapid.v1 der vi IKKE finner tilhørende søknad. Dette kan skyldes at vi begynte å lese sendte søknader og fattede vedtak samtidig fra rapid, men det kan gå en stund før det fattes vedtak på den søknaden"
-  view_id = "styringsinfo_vedtak_fattet_mangler_soknad_view"
+  dataset_id          = google_bigquery_dataset.styringsinfo_dataset.dataset_id
+  view_description    = "Basert på vedtak_fattet-hendelser på tbd.rapid.v1 der vi IKKE finner tilhørende søknad. Dette kan skyldes at vi begynte å lese sendte søknader og fattede vedtak samtidig fra rapid, men det kan gå en stund før det fattes vedtak på den søknaden"
+  view_id             = "styringsinfo_vedtak_fattet_mangler_soknad_view"
   view_schema = jsonencode(
     [
       {
