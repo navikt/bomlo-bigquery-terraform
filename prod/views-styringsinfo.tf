@@ -129,6 +129,42 @@ FROM `${var.gcp_project["project"]}.${google_bigquery_dataset.spre_styringsinfo_
 EOF
 }
 
+module "styringsinfo_vedtak_fattet_mangler_soknad_view" {
+  source = "../modules/google-bigquery-view"
+  deletion_protection = false
+  dataset_id = google_bigquery_dataset.styringsinfo_dataset.dataset_id
+  view_description = "Basert på vedtak_fattet-hendelser på tbd.rapid.v1 der vi IKKE finner tilhørende søknad. Dette kan skyldes at vi begynte å lese sendte søknader og fattede vedtak samtidig fra rapid, men det kan gå en stund før det fattes vedtak på den søknaden"
+  view_id = "styringsinfo_vedtak_fattet_mangler_soknad_view"
+  view_schema = jsonencode(
+    [
+      {
+        name        = "vedtak_fattet_hendelse_id"
+        type        = "STRING"
+        description = "Intern id laget når hendelsen legges på tbd.rapid.v1"
+        mode        = "NULLABLE"
+      },
+      {
+        name        = "vedtak_fattet"
+        type        = "TIMESTAMP"
+        description = "Tidspunktet vedtaket ble fattet."
+        mode        = "NULLABLE"
+      }
+    ]
+  )
+  view_query = <<EOF
+with vedtak_fattet_med_sist_mottatte_soknad as (select vedtak_hendelse_id
+  FROM (select vedtak_hendelse_id, ROW_NUMBER() OVER (PARTITION BY vdm.vedtak_hendelse_id ORDER BY sso.sendt DESC) as rangering
+        from `${var.gcp_project["project"]}.${google_bigquery_dataset.spre_styringsinfo_dataset.dataset_id}.public_vedtak_dokument_mapping` vdm
+                 inner join
+             `${var.gcp_project["project"]}.${google_bigquery_dataset.spre_styringsinfo_dataset.dataset_id}.public_sendt_soknad` sso
+             on vdm.dokument_hendelse_id = sso.hendelse_id)
+  where rangering = 1)
+select hendelse_id as vedtak_fattet_hendelse_id, vedtak_fattet_tidspunkt vedtak_fattet
+from `${var.gcp_project["project"]}.${google_bigquery_dataset.spre_styringsinfo_dataset.dataset_id}.public_vedtak_fattet` vfa
+where vfa.hendelse_id not in (select vedtak_hendelse_id from vedtak_fattet_med_sist_mottatte_soknad)
+EOF
+}
+
 module "styringsinfo_vedtak_forkastet_view" {
   source              = "../modules/google-bigquery-view"
   deletion_protection = false
