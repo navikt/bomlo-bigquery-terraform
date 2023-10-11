@@ -115,6 +115,12 @@ module "styringsinfo_vedtak_fattet_view" {
         type        = "TIMESTAMP"
         description = "Tidspunktet vedtaket ble fattet."
         mode        = "NULLABLE"
+      },
+      {
+        name        = "har_utbetaling"
+        type        = "BOOLEAN"
+        description = "Om vedtaket har en utbetaling knyttet til seg"
+        mode        = "NULLABLE"
       }
     ]
   )
@@ -124,6 +130,7 @@ SELECT
     hendelse_id,
     JSON_EXTRACT_SCALAR(melding, '$.vedtaksperiodeId') AS vedtaksperiode_id,
     JSON_EXTRACT_SCALAR(melding, '$.utbetalingId') AS utbetaling_id,
+    JSON_EXTRACT_SCALAR(melding, '$.utbetalingId') is not null as har_utbetaling,
     vedtak_fattet_tidspunkt AS vedtak_fattet
 FROM `${var.gcp_project["project"]}.${google_bigquery_dataset.spre_styringsinfo_dataset.dataset_id}.public_vedtak_fattet`
 EOF
@@ -266,7 +273,7 @@ with tidsbruk as (
 select 
   sso.sendt as soknad_sendt,
   vfa.vedtak_fattet as vedtak_fattet,
-  vfa.utbetaling_id is not null as har_utbetaling,
+  vfa.har_ubetaling,
   JUSTIFY_INTERVAL(vfa.vedtak_fattet - sso.sendt) as tid,
   date_diff(vfa.vedtak_fattet, sso.sendt, day) as dager_brukt,
   date_diff(vfa.vedtak_fattet, sso.sendt, hour) as timer_brukt,
