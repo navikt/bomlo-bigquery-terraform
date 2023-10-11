@@ -273,7 +273,7 @@ with tidsbruk as (
 select 
   sso.sendt as soknad_sendt,
   vfa.vedtak_fattet as vedtak_fattet,
-  vfa.har_ubetaling,
+  vfa.har_utbetaling,
   JUSTIFY_INTERVAL(vfa.vedtak_fattet - sso.sendt) as tid,
   date_diff(vfa.vedtak_fattet, sso.sendt, day) as dager_brukt,
   date_diff(vfa.vedtak_fattet, sso.sendt, hour) as timer_brukt,
