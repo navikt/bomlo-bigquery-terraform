@@ -57,7 +57,7 @@ data "google_sql_database_instance" "dataprodukt_forstegangsbehandling_db" {
 }
 
 data "google_sql_database_instance" "spaghet_db" {
-  name = "spaghet"
+  name = "spaghet2"
 }
 
 data "google_sql_database_instance" "spre_styringsinfo_db" {
