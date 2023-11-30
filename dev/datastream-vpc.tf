@@ -76,8 +76,9 @@ module "cloud_sql_auth_proxy_container_datastream" {
 
 // Create a VM used to host the Cloud SQL reverse proxy.
 resource "google_compute_instance" "tbd_datastream_cloud_sql_proxy_vm" {
+  allow_stopping_for_update = true
   name         = "tbd-datastream-cloud-sql-proxy-vm"
-  machine_type = "e2-small"
+  machine_type = "e2-micro"
   project      = var.gcp_project["project"]
   zone         = var.gcp_project["zone"]
 
