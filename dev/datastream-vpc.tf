@@ -78,7 +78,7 @@ module "cloud_sql_auth_proxy_container_datastream" {
 resource "google_compute_instance" "tbd_datastream_cloud_sql_proxy_vm" {
   allow_stopping_for_update = true
   name                      = "tbd-datastream-cloud-sql-proxy-vm"
-  machine_type              = "e2-micro"
+  machine_type              = "e2-small"
   project                   = var.gcp_project["project"]
   zone                      = var.gcp_project["zone"]
 
