@@ -296,6 +296,10 @@ where rangering = 1
 EOF
 }
 
+
+// Dette viewet henter data fra et et view eid av Team Flex. For at dette viewet skal fungere må det angies som et
+// authorized-view i Flex sin terraform.
+// Se: https://github.com/navikt/flex-bigquery-terraform/commit/404c150fb6fdf0cb4e6e28f0981574fc48ff01e7
 module "styringsinfo_datakvalitet_soknadhendelser_view" {
   source              = "../modules/google-bigquery-view"
   deletion_protection = false
