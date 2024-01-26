@@ -10,22 +10,36 @@ Opprettelse av bucket og bruk av denne for terraform state må gjøres i to sepa
 
    I dette repoet er det opprettet en bruker med navn `terraform` i `tbd-dev` og `tbd-prod` med disse tilgangene.
 
-2. Opprett key for service account og last ned
-3. Legg inn filen med service account keyen i GitHub secret (våre secrets heter GCP_SECRET_DEV og GCP_SECRET_PROD)
-4. Installer Terraform lokalt og sett miljøvariabel GOOGLE_APPLICATION_CREDENTIALS som peker til den nedlastede filen
+2. Opprett key for service account for hhv [dev](https://console.cloud.google.com/iam-admin/serviceaccounts?project=tbd-dev-7ff9) og [prod](https://console.cloud.google.com/iam-admin/serviceaccounts?project=tbd-prod-eacd)
 
-   NB: Denne gir tilgang til service accounten i GCP, så den burde nok ikke beholdes lokalt, spesielt for prod
-5. Kjør kode lokalt for å opprette bucket (men ikke prøv å bruke den enda). Se kode i [commit](https://github.com/navikt/bomlo-bigquery-terraform/commit/3a6b7edb78a29052cd1e1dfae54c5ac3404768f8)
+   * Velg "Manage keys" fra actions for terraform-kontoen
+   * Velg "Add keys" -> "Create new key" -> "Key type=JSON" -> "Create"
+   * Key lagres til fil lokalt
+   * Flytt filene til hjemmeområde og endre rettigheter slik: chmod go-rwx ~/tbd-terraform-*.key
+
+3. Legg inn filen med service account keyen i [GitHub secret](https://github.com/navikt/bomlo-bigquery-terraform/settings/secrets/actions) (våre secrets heter GCP_SECRET_DEV og GCP_SECRET_PROD)
+
+4. Installer Terraform lokalt
+ 
+   F.eks med brew: brew install terraform
+
+5. Gå til mappe du skal kjøre terraform fra (prod eller dev)
+
+   Sett context (dev-gcp/prod-gcp) og kjør kommando: gcloud auth application-default login
+
+6. Kjør kode lokalt for å opprette bucket (men ikke prøv å bruke den enda). Se kode i [commit](https://github.com/navikt/bomlo-bigquery-terraform/commit/3a6b7edb78a29052cd1e1dfae54c5ac3404768f8)
     ```
     terraform init
     terraform plan
+    terraform plan -refresh-only -detailed-exitcode
     terraform apply
     ```    
-6. Kjør kode lokalt for å bruke bucket for state. Se kode i [commit](https://github.com/navikt/bomlo-bigquery-terraform/commit/42b61393184652e12f2efaf9bb974e7c7cfbeefb)
+7. Kjør kode lokalt for å bruke bucket for state. Se kode i [commit](https://github.com/navikt/bomlo-bigquery-terraform/commit/42b61393184652e12f2efaf9bb974e7c7cfbeefb)
      ```
     terraform init
     ```   
-7. Nå kan workflowen pushes
+8. Endre context til miljø det ikke er kjørt for å gjenta nødvendige steg over.
+9. Nå kan workflowen pushes
 
 ## Hvordan sette opp en datastream i GCP med terraform
 
