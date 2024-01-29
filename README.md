@@ -5,7 +5,7 @@ Terraform-scipts for å opprette BigQuery-ressurser for Bømloklyngen
 
 Dersom terraform allerede er satt opp og initiert for repo slik at bygg på GA fungerer, og du kun ønsker å inspisere hva terraform finner og rapporterer av endringer:
 
-Følg oppskriften under fra og med pkt. 4 (Installer Terraform lokalt).
+Følg oppskriften under fra og med pkt. 4 (Installer Terraform lokalt) til pkt. 6 (Kjør kode lokalt).
 
 ## Hvordan sette opp repo med Terraform første gang
 Opprettelse av bucket og bruk av denne for terraform state må gjøres i to separate steg. Dette må gjøres lokalt fordi uten terraform state i bucketen så vil ikke GitHub Actions ha mulighet til å ta vare på state mellom kjøringer. Hvis vi prøver å gjøre dette via GitHub Actions vil bruk av bucket for terraform state feile da den i tillegg vil forsøke å opprette bucketen på nytt, fordi staten ikke har spor av opprettelsen av bucketen.
@@ -27,11 +27,12 @@ Opprettelse av bucket og bruk av denne for terraform state må gjøres i to sepa
 
 4. Installer Terraform lokalt
  
-   F.eks med brew: brew install terraform
+   F.eks med brew: `brew install terraform`
 
-5. Gå til mappe du skal kjøre terraform fra (prod eller dev)
-
-   Sett context (dev-gcp/prod-gcp) og kjør kommando: gcloud auth application-default login
+5. Velg miljø og logg inn 
+   - Gå til mappe du skal kjøre terraform fra (prod eller dev): `cd dev`
+   - Sett context (dev-gcp/prod-gcp): `kubectl config use-context dev-gcp`
+   - Kjør kommando: `gcloud auth application-default login`
 
 6. Kjør kode lokalt for å opprette bucket (men ikke prøv å bruke den enda). Se kode i [commit](https://github.com/navikt/bomlo-bigquery-terraform/commit/3a6b7edb78a29052cd1e1dfae54c5ac3404768f8)
     ```
