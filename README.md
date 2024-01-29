@@ -3,7 +3,7 @@ Terraform-scipts for å opprette BigQuery-ressurser for Bømloklyngen
 
 ## Hvordan kjøre Terraform lokalt
 
-Dersom terraform allerede er satt opp og initiert for repo første gangen, og kun ønsker å inspisere hva terraform finner og rapporterer av endringer:
+Dersom terraform allerede er satt opp og initiert for repo slik at bygg på GA fungerer, og du kun ønsker å inspisere hva terraform finner og rapporterer av endringer:
 
 Følg oppskriften under fra og med pkt. 4 (Installer Terraform lokalt).
 
@@ -36,16 +36,18 @@ Opprettelse av bucket og bruk av denne for terraform state må gjøres i to sepa
 6. Kjør kode lokalt for å opprette bucket (men ikke prøv å bruke den enda). Se kode i [commit](https://github.com/navikt/bomlo-bigquery-terraform/commit/3a6b7edb78a29052cd1e1dfae54c5ac3404768f8)
     ```
     terraform init
-    terraform plan
     terraform plan -refresh-only -detailed-exitcode
+    ``` 
+7. Når du er fornøyd med endringene terraform rapporterer om i punktet over, kjør følgende kommando: 
+    ```
     terraform apply
-    ```    
-7. Kjør kode lokalt for å bruke bucket for state. Se kode i [commit](https://github.com/navikt/bomlo-bigquery-terraform/commit/42b61393184652e12f2efaf9bb974e7c7cfbeefb)
+    ```  
+8. Kjør kode lokalt for å bruke bucket for state. Se kode i [commit](https://github.com/navikt/bomlo-bigquery-terraform/commit/42b61393184652e12f2efaf9bb974e7c7cfbeefb)
      ```
     terraform init
     ```   
-8. Endre context til miljø det ikke er kjørt for å gjenta nødvendige steg over.
-9. Nå kan workflowen pushes
+9. Endre context til miljø det ikke er kjørt for å gjenta nødvendige steg over.
+10. Nå kan workflowen pushes
 
 
 ## Hvordan sette opp en datastream i GCP med terraform
