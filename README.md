@@ -1,7 +1,13 @@
 # bomlo-bigquery-terraform
 Terraform-scipts for å opprette BigQuery-ressurser for Bømloklyngen
 
-## Hvordan komme i gang med Terraform
+## Hvordan kjøre Terraform lokalt
+
+Dersom terraform allerede er satt opp og initiert for repo første gangen, og kun ønsker å inspisere hva terraform finner og rapporterer av endringer:
+
+Følg oppskriften under fra og med pkt. 4 (Installer Terraform lokalt).
+
+## Hvordan sette opp repo med Terraform første gang
 Opprettelse av bucket og bruk av denne for terraform state må gjøres i to separate steg. Dette må gjøres lokalt fordi uten terraform state i bucketen så vil ikke GitHub Actions ha mulighet til å ta vare på state mellom kjøringer. Hvis vi prøver å gjøre dette via GitHub Actions vil bruk av bucket for terraform state feile da den i tillegg vil forsøke å opprette bucketen på nytt, fordi staten ikke har spor av opprettelsen av bucketen.
 1. Opprett service account i GCP med permissions:
    * BigQuery Data Owner
@@ -40,6 +46,7 @@ Opprettelse av bucket og bruk av denne for terraform state må gjøres i to sepa
     ```   
 8. Endre context til miljø det ikke er kjørt for å gjenta nødvendige steg over.
 9. Nå kan workflowen pushes
+
 
 ## Hvordan sette opp en datastream i GCP med terraform
 
