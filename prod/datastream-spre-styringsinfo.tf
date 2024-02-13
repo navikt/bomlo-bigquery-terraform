@@ -75,7 +75,7 @@ resource "google_datastream_stream" "spre_styringsinfo_datastream" {
           }
 
           postgresql_tables {
-            table = "behandlingshendelse",
+            table = "behandlingshendelse"
             postgresql_columns {
               column = "hendelseId"
             }
