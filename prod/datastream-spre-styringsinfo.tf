@@ -71,6 +71,19 @@ resource "google_datastream_stream" "spre_styringsinfo_datastream" {
           }
 
           postgresql_tables {
+            table = "hendelse"
+          }
+
+          postgresql_tables {
+            table = "behandlingshendelse",
+            postgresql_columns {
+              column = "hendelseId"
+            }
+            postgresql_columns {
+              column = "siste"
+            }
+          }
+          postgresql_tables {
             table = "sendt_soknad"
             postgresql_columns {
               column = "patch_level"
