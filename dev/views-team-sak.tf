@@ -79,7 +79,7 @@ module "saksbehandlingsstatistikk_til_team_sak_view" {
       },
       {
         name        = "relatertBehandlingUuid"
-        type        = "TIMESTAMP"
+        type        = "STRING"
         description = "peker på relatert behandlingUuid hvis behandlingen gjelder samme sak"
         mode        = "NULLABLE"
       },
