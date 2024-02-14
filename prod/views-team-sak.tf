@@ -85,13 +85,13 @@ module "saksbehandlingsstatistikk_til_team_sak_view" {
       },
       {
         name        = "mottattTid"
-        type        = "TIMESTAMP"
+        type        = "STRING"
         description = "Tidspunktet da behandlingen oppstår"
         mode        = "NULLABLE"
       },
       {
         name        = "registrertTid"
-        type        = "TIMESTAMP"
+        type        = "STRING"
         description = "Tidspunkt da behandlingen første gang ble registrert i fagsystemet"
         mode        = "NULLABLE"
       },

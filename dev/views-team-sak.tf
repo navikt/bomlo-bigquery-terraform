@@ -67,13 +67,13 @@ module "saksbehandlingsstatistikk_til_team_sak_view" {
       },
       {
         name        = "funksjonelltid"
-        type        = "TIMESTAMP"
+        type        = "STRING"
         description = "Funksjonell tid. @opprettet på hendelsen som har generert raden"
         mode        = "NULLABLE"
       },
       {
         name        = "teknisktid"
-        type        = "TIMESTAMP"
+        type        = "STRING"
         description = "Teknisk tid. Når hendelsen (raden) legges inn i databasen."
         mode        = "NULLABLE"
       },
