@@ -39,16 +39,21 @@ Opprettelse av bucket og bruk av denne for terraform state må gjøres i to sepa
     terraform init
     terraform plan -refresh-only -detailed-exitcode
     ``` 
-7. Når du er fornøyd med endringene terraform rapporterer om i punktet over, kjør følgende kommando: 
+7. Gjør eventuelle endringer i terraform-filer, og for å se resultatet av dem kjør følgende kommando:
+   ```
+   terraform plan -detailed-exitcode
+   ```
+   (forskjellen på `terraform plan -refresh-only` og `terraform plan` kan du lese om [her](https://medium.com/code-oil/understanding-terraform-plan-apply-refresh-only-the-myths-and-fixing-drift-5963207a1df8))
+8. Når du er fornøyd med endringene terraform rapporterer om i punktet over, kjør følgende kommando: 
     ```
     terraform apply
     ```  
-8. Kjør kode lokalt for å bruke bucket for state. Se kode i [commit](https://github.com/navikt/bomlo-bigquery-terraform/commit/42b61393184652e12f2efaf9bb974e7c7cfbeefb)
+9. Kjør kode lokalt for å bruke bucket for state. Se kode i [commit](https://github.com/navikt/bomlo-bigquery-terraform/commit/42b61393184652e12f2efaf9bb974e7c7cfbeefb)
      ```
     terraform init
     ```   
-9. Endre context til miljø det ikke er kjørt for å gjenta nødvendige steg over.
-10. Nå kan workflowen pushes
+10. Endre context til miljø det ikke er kjørt for å gjenta nødvendige steg over.
+11. Nå kan workflowen pushes
 
 
 ## Hvordan sette opp en datastream i GCP med terraform
