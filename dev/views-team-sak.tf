@@ -67,31 +67,31 @@ module "saksbehandlingsstatistikk_til_team_sak_view" {
       },
       {
         name        = "funksjonelltid"
-        type        = "STRING"
+        type        = "TIMESTAMP"
         description = "Funksjonell tid. @opprettet på hendelsen som har generert raden"
         mode        = "NULLABLE"
       },
       {
         name        = "teknisktid"
-        type        = "STRING"
+        type        = "TIMESTAMP"
         description = "Teknisk tid. Når hendelsen (raden) legges inn i databasen."
         mode        = "NULLABLE"
       },
       {
         name        = "relatertBehandlingUuid"
-        type        = "STRING"
+        type        = "TIMESTAMP"
         description = "peker på relatert behandlingUuid hvis behandlingen gjelder samme sak"
         mode        = "NULLABLE"
       },
       {
         name        = "mottattTid"
-        type        = "TIMESTAMP"
+        type        = "STRING"
         description = "Tidspunktet da behandlingen oppstår"
         mode        = "NULLABLE"
       },
       {
         name        = "registrertTid"
-        type        = "TIMESTAMP"
+        type        = "STRING"
         description = "Tidspunkt da behandlingen første gang ble registrert i fagsystemet"
         mode        = "NULLABLE"
       },
