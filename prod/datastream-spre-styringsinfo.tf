@@ -80,6 +80,9 @@ resource "google_datastream_stream" "spre_styringsinfo_datastream" {
               column = "hendelseid"
             }
             postgresql_columns {
+              column = "er_korrigert"
+            }
+            postgresql_columns {
               column = "siste"
             }
           }
