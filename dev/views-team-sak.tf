@@ -138,7 +138,7 @@ WITH
   json_tidsstempler AS (
   SELECT
     sekvensnummer,
-    LEFT(JSON_VALUE(DATA, "$.mottattTid"), 26) AS mottatTid_string,
+    LEFT(JSON_VALUE(DATA, "$.mottattTid"), 26) AS mottattTid_string,
     LEFT(JSON_VALUE(DATA, "$.registrertTid"), 26) AS registrertTid_string,
   FROM
    `${var.gcp_project["project"]}.${google_bigquery_dataset.spre_styringsinfo_dataset.dataset_id}.public_behandlingshendelse` )
@@ -153,11 +153,11 @@ SELECT
   teknisktid,
   JSON_VALUE(DATA, "$.relatertBehandlingId") AS relatertBehandlingUuid,
   CASE
-    WHEN LENGTH(mottatTid_string) = 16 THEN PARSE_TIMESTAMP("%FT%R", mottatTid_string)
+    WHEN LENGTH(mottattTid_string) = 16 THEN PARSE_TIMESTAMP("%FT%R", mottattTid_string)
   ELSE
-  TIMESTAMP(mottatTid_string)
+  TIMESTAMP(mottattTid_string)
   END
-  AS mottatTid,
+  AS mottattTid,
   CASE
     WHEN LENGTH(registrertTid_string) = 16 THEN PARSE_TIMESTAMP("%FT%R", registrertTid_string)
   ELSE
