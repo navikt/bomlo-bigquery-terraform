@@ -85,13 +85,13 @@ module "saksbehandlingsstatistikk_til_team_sak_view" {
       },
       {
         name        = "mottattTid"
-        type        = "STRING"
+        type        = "TIMESTAMP"
         description = "Tidspunktet da behandlingen oppstår"
         mode        = "NULLABLE"
       },
       {
         name        = "registrertTid"
-        type        = "STRING"
+        type        = "TIMESTAMP"
         description = "Tidspunkt da behandlingen første gang ble registrert i fagsystemet"
         mode        = "NULLABLE"
       },
@@ -134,24 +134,48 @@ module "saksbehandlingsstatistikk_til_team_sak_view" {
     ]
   )
   view_query = <<EOF
+WITH
+  json_tidsstempler AS (
+  SELECT
+    sekvensnummer,
+    LEFT(JSON_VALUE(DATA, "$.mottattTid"), 26) AS mottatTid_string,
+    LEFT(JSON_VALUE(DATA, "$.registrertTid"), 26) AS registrertTid_string,
+  FROM
+   `${var.gcp_project["project"]}.${google_bigquery_dataset.spre_styringsinfo_dataset.dataset_id}.public_behandlingshendelse` )
 SELECT
-  sekvensnummer,
-  "SYKEPENGER" as sakYtelse,
-  "NASJONAL" as sakUtland,
-  "Speil" as avsender,
-  sakid as sakUuid,
-  behandlingid as behandlingUuid,
+  b.sekvensnummer,
+  "SYKEPENGER" AS sakYtelse,
+  "NASJONAL" AS sakUtland,
+  "Speil" AS avsender,
+  sakid AS sakUuid,
+  behandlingid AS behandlingUuid,
   funksjonelltid,
   teknisktid,
-  JSON_VALUE(data, "$.relatertBehandlingId") as relatertBehandlingUuid,
-  JSON_VALUE(data, "$.mottattTid") as mottattTid,
-  JSON_VALUE(data, "$.registrertTid") as registrertTid,
-  JSON_VALUE(data, "$.behandlingtype") as behandlingtype,
-  JSON_VALUE(data, "$.behandlingstatus") as behandlingstatus,
-  JSON_VALUE(data, "$.behandlingskilde") as behandlingskilde,
-  JSON_VALUE(data, "$.behandlingsresultat") as behandlingsresultat,
-  JSON_VALUE(data, "$.aktørId") as aktorId,
+  JSON_VALUE(DATA, "$.relatertBehandlingId") AS relatertBehandlingUuid,
+  CASE
+    WHEN LENGTH(mottatTid_string) = 16 THEN PARSE_TIMESTAMP("%FT%R", mottatTid_string)
+  ELSE
+  TIMESTAMP(mottatTid_string)
+  END
+  AS mottatTid,
+  CASE
+    WHEN LENGTH(registrertTid_string) = 16 THEN PARSE_TIMESTAMP("%FT%R", registrertTid_string)
+  ELSE
+  TIMESTAMP(registrertTid_string)
+END
+  AS registrertTid,
+  JSON_VALUE(DATA, "$.behandlingtype") AS behandlingtype,
+  JSON_VALUE(DATA, "$.behandlingstatus") AS behandlingstatus,
+  JSON_VALUE(DATA, "$.behandlingskilde") AS behandlingskilde,
+  JSON_VALUE(DATA, "$.behandlingsresultat") AS behandlingsresultat,
+  JSON_VALUE(DATA, "$.aktørId") AS aktorId,
   versjon
-FROM `${var.gcp_project["project"]}.${google_bigquery_dataset.spre_styringsinfo_dataset.dataset_id}.public_behandlingshendelse`
+FROM
+  json_tidsstempler
+INNER JOIN
+  `${var.gcp_project["project"]}.${google_bigquery_dataset.spre_styringsinfo_dataset.dataset_id}.public_behandlingshendelse` b
+ON
+  b.sekvensnummer = json_tidsstempler.sekvensnummer
+  order by sekvensnummer
 EOF
 }
