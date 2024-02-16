@@ -23,6 +23,13 @@ resource "google_bigquery_dataset" "spre_styringsinfo_dataset" {
       table_id   = "styringsinfo_sendt_soknad_view"
     }
   }
+  access {
+    view {
+      dataset_id = "saksbehandlingsstatistikk_til_team_sak_dataset"
+      project_id = var.gcp_project["project"]
+      table_id   = "saksbehandlingsstatistikk_til_team_sak_view"
+    }
+  }
   timeouts {}
 }
 
