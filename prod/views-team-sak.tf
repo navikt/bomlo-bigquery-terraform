@@ -120,6 +120,12 @@ module "saksbehandlingsstatistikk_til_team_sak_view" {
         mode        = "NULLABLE"
       },
       {
+        name        = "behandlingsmetode"
+        type        = "STRING"
+        description = "Om behandlingen var manuell eller automatisk."
+        mode        = "NULLABLE"
+      },
+      {
         name        = "aktorId"
         type        = "STRING"
         description = "Identifiserer hvem behandlingen gjelder for"
@@ -169,6 +175,7 @@ END
   JSON_VALUE(DATA, "$.behandlingskilde") AS behandlingskilde,
   JSON_VALUE(DATA, "$.behandlingsresultat") AS behandlingsresultat,
   JSON_VALUE(DATA, "$.aktørId") AS aktorId,
+  JSON_VALUE(DATA, "$.behandlingsmetode") AS behandlingsmetode,
   versjon
 FROM
   json_tidsstempler
