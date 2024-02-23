@@ -132,6 +132,18 @@ module "saksbehandlingsstatistikk_til_team_sak_view" {
         mode        = "NULLABLE"
       },
       {
+        name        = "saksbehandlerenhet"
+        type        = "STRING"
+        description = "Identifiserer hvilken enhet saksbehandler tilhører"
+        mode        = "NULLABLE"
+      },
+      {
+        name        = "beslutterenhet"
+        type        = "STRING"
+        description = "Identifiserer hvilken enhet beslutter tilhører"
+        mode        = "NULLABLE"
+      },
+      {
         name        = "versjon"
         type        = "STRING"
         description = "Skjemaversjon. Ved endringer og utvidelser i felter øker vi versjon"
@@ -176,6 +188,8 @@ END
   JSON_VALUE(DATA, "$.behandlingsresultat") AS behandlingsresultat,
   JSON_VALUE(DATA, "$.aktørId") AS aktorId,
   JSON_VALUE(DATA, "$.behandlingsmetode") AS behandlingsmetode,
+  JSON_VALUE(DATA, "$.saksbehandlerEnhet") AS saksbehandlerenhet,
+  JSON_VALUE(DATA, "$.beslutterEnhet") AS beslutterenhet,
   versjon
 FROM
   json_tidsstempler
