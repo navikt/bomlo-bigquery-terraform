@@ -144,6 +144,12 @@ module "saksbehandlingsstatistikk_til_team_sak_view" {
         mode        = "NULLABLE"
       },
       {
+        name        = "periodetype"
+        type        = "STRING"
+        description = "Angir om saken er en førstegangsbehandling der inngangsvilkår skal vurderes, eller om det er en forlengelse der dette ikke er nødvendig"
+        mode        = "NULLABLE"
+      },
+      {
         name        = "versjon"
         type        = "STRING"
         description = "Skjemaversjon. Ved endringer og utvidelser i felter øker vi versjon"
@@ -190,6 +196,7 @@ END
   JSON_VALUE(DATA, "$.behandlingsmetode") AS behandlingsmetode,
   JSON_VALUE(DATA, "$.saksbehandlerEnhet") AS saksbehandlerenhet,
   JSON_VALUE(DATA, "$.beslutterEnhet") AS beslutterenhet,
+  JSON_VALUE(DATA, "$.periodetype") AS periodetype,
   versjon
 FROM
   json_tidsstempler
