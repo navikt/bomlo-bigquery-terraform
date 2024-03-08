@@ -150,6 +150,12 @@ module "saksbehandlingsstatistikk_til_team_sak_view" {
         mode        = "NULLABLE"
       },
       {
+        name        = "mottaker"
+        type        = "STRING"
+        description = "Angir hvem det utbetales eller trekkes penger fra"
+        mode        = "NULLABLE"
+      },
+      {
         name        = "versjon"
         type        = "STRING"
         description = "Skjemaversjon. Ved endringer og utvidelser i felter øker vi versjon"
@@ -197,6 +203,7 @@ END
   JSON_VALUE(DATA, "$.saksbehandlerEnhet") AS saksbehandlerenhet,
   JSON_VALUE(DATA, "$.beslutterEnhet") AS beslutterenhet,
   JSON_VALUE(DATA, "$.periodetype") AS periodetype,
+  JSON_VALUE(DATA, "$.mottaker") AS mottaker,
   versjon
 FROM
   json_tidsstempler
