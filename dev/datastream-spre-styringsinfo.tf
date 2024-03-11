@@ -113,6 +113,10 @@ resource "google_datastream_stream" "spre_styringsinfo_datastream" {
               column = "patch_level"
             }
           }
+
+          postgresql_tables {
+            table = "generasjon_opprettet"
+          }
         }
       }
 
