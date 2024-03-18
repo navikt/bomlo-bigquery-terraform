@@ -183,16 +183,16 @@ SELECT
   teknisktid,
   JSON_VALUE(DATA, "$.relatertBehandlingId") AS relatertBehandlingUuid,
   CASE
-    WHEN LENGTH(mottattTid_string) = 16 THEN PARSE_TIMESTAMP("%FT%R", mottattTid_string)
+    WHEN LENGTH(mottattTid_string) = 16 THEN PARSE_TIMESTAMP("%FT%R", mottattTid_string, 'Europe/Oslo')
   ELSE
-  TIMESTAMP(mottattTid_string)
+  TIMESTAMP(mottattTid_string, 'Europe/Oslo')
   END
   AS mottattTid,
   CASE
-    WHEN LENGTH(registrertTid_string) = 16 THEN PARSE_TIMESTAMP("%FT%R", registrertTid_string)
+    WHEN LENGTH(registrertTid_string) = 16 THEN PARSE_TIMESTAMP("%FT%R", registrertTid_string, 'Europe/Oslo')
   ELSE
-  TIMESTAMP(registrertTid_string)
-END
+  TIMESTAMP(registrertTid_string, 'Europe/Oslo')
+  END
   AS registrertTid,
   JSON_VALUE(DATA, "$.behandlingtype") AS behandlingtype,
   JSON_VALUE(DATA, "$.behandlingstatus") AS behandlingstatus,
