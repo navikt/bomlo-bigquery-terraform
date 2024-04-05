@@ -96,9 +96,9 @@ module "saksbehandlingsstatistikk_til_team_sak_view" {
         mode        = "NULLABLE"
       },
       {
-        name        = "behandlingtype"
+        name        = "behandlingstype"
         type        = "STRING"
-        description = "Hvorvidt behandlingen er en førstegangsbehandling, omgjøring, reuvrdering osv"
+        description = "Hvorvidt behandlingen er en søknad, gjenåpning eller revurdering"
         mode        = "NULLABLE"
       },
       {
@@ -164,16 +164,8 @@ module "saksbehandlingsstatistikk_til_team_sak_view" {
     ]
   )
   view_query = <<EOF
-WITH
-  json_tidsstempler AS (
-  SELECT
-    sekvensnummer,
-    LEFT(JSON_VALUE(DATA, "$.mottattTid"), 26) AS mottattTid_string,
-    LEFT(JSON_VALUE(DATA, "$.registrertTid"), 26) AS registrertTid_string,
-  FROM
-   `${var.gcp_project["project"]}.${google_bigquery_dataset.spre_styringsinfo_dataset.dataset_id}.public_behandlingshendelse` )
 SELECT
-  b.sekvensnummer,
+  sekvensnummer,
   "SYKEPENGER" AS sakYtelse,
   "NASJONAL" AS sakUtland,
   "Speil" AS avsender,
@@ -182,19 +174,9 @@ SELECT
   funksjonelltid,
   teknisktid,
   JSON_VALUE(DATA, "$.relatertBehandlingId") AS relatertBehandlingUuid,
-  CASE
-    WHEN LENGTH(mottattTid_string) = 16 THEN PARSE_TIMESTAMP("%FT%R", mottattTid_string, 'Europe/Oslo')
-  ELSE
-  TIMESTAMP(mottattTid_string, 'Europe/Oslo')
-  END
-  AS mottattTid,
-  CASE
-    WHEN LENGTH(registrertTid_string) = 16 THEN PARSE_TIMESTAMP("%FT%R", registrertTid_string, 'Europe/Oslo')
-  ELSE
-  TIMESTAMP(registrertTid_string, 'Europe/Oslo')
-  END
-  AS registrertTid,
-  JSON_VALUE(DATA, "$.behandlingtype") AS behandlingtype,
+  TIMESTAMP(JSON_VALUE(DATA, "$.mottattTid")) AS mottattTid,
+  TIMESTAMP(JSON_VALUE(DATA, "$.registrertTid")) AS registrertTid,
+  JSON_VALUE(DATA, "$.behandlingstype") AS behandlingstype,
   JSON_VALUE(DATA, "$.behandlingstatus") AS behandlingstatus,
   JSON_VALUE(DATA, "$.behandlingskilde") AS behandlingskilde,
   JSON_VALUE(DATA, "$.behandlingsresultat") AS behandlingsresultat,
@@ -206,12 +188,8 @@ SELECT
   JSON_VALUE(DATA, "$.mottaker") AS mottaker,
   versjon
 FROM
-  json_tidsstempler
-INNER JOIN
-  `${var.gcp_project["project"]}.${google_bigquery_dataset.spre_styringsinfo_dataset.dataset_id}.public_behandlingshendelse` b
-ON
-  b.sekvensnummer = json_tidsstempler.sekvensnummer
-  order by sekvensnummer
+  `${var.gcp_project["project"]}.${google_bigquery_dataset.spre_styringsinfo_dataset.dataset_id}.public_behandlingshendelse`
+ORDER BY sekvensnummer
 EOF
 }
 
