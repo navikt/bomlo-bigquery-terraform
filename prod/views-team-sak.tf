@@ -17,6 +17,10 @@ resource "google_bigquery_dataset" "saksbehandlingsstatistikk_til_team_sak_datas
     role          = "WRITER"
     special_group = "projectWriters"
   }
+  access {
+    role          = "READER"
+    user_by_email = "sykepenger-ptsak-reader@ptsak-prod-1ff7.iam.gserviceaccount.com"
+  }
   timeouts {}
 }
 
