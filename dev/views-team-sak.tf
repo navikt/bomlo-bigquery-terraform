@@ -136,6 +136,12 @@ module "saksbehandlingsstatistikk_til_team_sak_view" {
         mode        = "NULLABLE"
       },
       {
+        name        = "ansvarligenhet"
+        type        = "STRING"
+        description = "Identifiserer hvilken enhet som er ansvarlig for behandlingen"
+        mode        = "NULLABLE"
+      },
+      {
         name        = "saksbehandlerenhet"
         type        = "STRING"
         description = "Identifiserer hvilken enhet saksbehandler tilhører"
@@ -173,6 +179,7 @@ SELECT
   "SYKEPENGER" AS sakYtelse,
   "NASJONAL" AS sakUtland,
   "Speil" AS avsender,
+  "4488" AS ansvarligenhet,
   sakid AS sakUuid,
   behandlingid AS behandlingUuid,
   funksjonelltid,
