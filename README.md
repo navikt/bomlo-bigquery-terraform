@@ -125,6 +125,14 @@ Hvis du får problemer med å kjøre testene så trengs det muligens noen endrin
    2. 🥇 mellom datastream og bigquery (endringene i `datastream-vpc.tf` i commiten)
 8. Lag datastream (f.eks. `arbeidsgiveropplysninger_datastream`)
 
+### Nullstille/wipe data
+Dersom man i sjeldne tilfeller ønsker å nullstille og starte synkronisering av data på nytt er det erfaringsmessig* best å slette datastream og opprette den på nytt.
+Fremgangsmåten blir da:
+1. Slett datastream (fra GCP-console)
+2. Slett tilhørende tabeller i BigQuery (fra GCP-console)
+3. Truncate tabeller i Postgres
+4. Kjør terraform-bygget på nytt slik at datastream gjenopprettes
 
+\* Backfill i kombinasjon med truncate på kildetabellene har vist seg å være litt tricky. Det kan virke som at datastreamen holder på tidligere data som har blitt truncated.
 ### Stuck
 * Når du legger til nye proxy instances så er det behov for å resette VM-en (den finner du på GCP: Compute Engine ➡️ VM instances ➡️ trykk på din VM ➡️ trykk på reset)
