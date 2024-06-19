@@ -93,26 +93,6 @@ resource "google_datastream_stream" "spre_styringsinfo_datastream" {
               column = "siste"
             }
           }
-          postgresql_tables {
-            table = "sendt_soknad"
-            postgresql_columns {
-              column = "patch_level"
-            }
-          }
-
-          postgresql_tables {
-            table = "vedtak_fattet"
-            postgresql_columns {
-              column = "patch_level"
-            }
-          }
-
-          postgresql_tables {
-            table = "vedtak_forkastet"
-            postgresql_columns {
-              column = "patch_level"
-            }
-          }
         }
       }
 
