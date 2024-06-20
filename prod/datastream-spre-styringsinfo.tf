@@ -18,13 +18,6 @@ resource "google_bigquery_dataset" "spre_styringsinfo_dataset" {
   }
   access {
     view {
-      dataset_id = "styringsinfo_dataset"
-      project_id = var.gcp_project["project"]
-      table_id   = "styringsinfo_sendt_soknad_view"
-    }
-  }
-  access {
-    view {
       dataset_id = google_bigquery_dataset.saksbehandlingsstatistikk_til_team_sak_dataset.dataset_id
       project_id = var.gcp_project["project"]
       table_id   = "behandlingshendelse_view"
