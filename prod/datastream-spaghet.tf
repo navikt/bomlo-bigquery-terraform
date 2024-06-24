@@ -71,6 +71,10 @@ resource "google_datastream_stream" "spaghet_datastream" {
           postgresql_tables {
             table = "regelverksvarsel"
           }
+
+          postgresql_tables {
+            table = "annullering"
+          }
         }
       }
     }
