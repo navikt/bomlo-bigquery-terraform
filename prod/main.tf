@@ -23,3 +23,12 @@ module "google_storage_bucket" {
   name     = "tbd-bigquery-terraform-state-prod"
   location = var.gcp_project["region"]
 }
+
+# Make a workload pool for bomlo-dbt repo
+module "google_bigquery_workload_pool" {
+  source = "../modules/google-bigquery-workload-pool"
+
+  project_id    = var.gcp_project["project"]
+  grants        = ["roles/bigquery.dataEditor", "roles/bigquery.user"]
+  repo_full_name = "navikt/bomlo-dbt"
+}
