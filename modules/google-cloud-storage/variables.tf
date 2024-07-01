@@ -30,3 +30,9 @@ variable "principals" {
   type        = list(string)
   description = "List of principals to grant access to the bucket."
 }
+
+variable "uniform_bucket_level_access" {
+  description = "Whether to enable uniform bucket level access or not."
+  type        = bool
+  default     = false
+}

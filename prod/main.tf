@@ -37,8 +37,9 @@ module "google_bigquery_workload_pool" {
 module "google_storage_bucket_dbt_state" {
   source = "../modules/google-cloud-storage"
 
-  name       = "tbd-bomlo-dbt-state"
-  location   = var.gcp_project["region"]
-  versioning = false
-  principals = [module.google_bigquery_workload_pool.workpool-principalSet]
+  name                        = "tbd-bomlo-dbt-state"
+  location                    = var.gcp_project["region"]
+  versioning                  = false
+  principals                  = [module.google_bigquery_workload_pool.workpool-principalSet]
+  uniform_bucket_level_access = true
 }
