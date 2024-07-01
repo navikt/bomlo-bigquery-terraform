@@ -29,6 +29,6 @@ module "google_bigquery_workload_pool" {
   source = "../modules/google-bigquery-workload-pool"
 
   project_id     = var.gcp_project["project"]
-  grants         = ["roles/bigquery.dataEditor", "roles/bigquery.user"]
+  grants         = ["roles/bigquery.dataOwner", "roles/bigquery.user"]
   repo_full_name = "navikt/bomlo-dbt"
 }
