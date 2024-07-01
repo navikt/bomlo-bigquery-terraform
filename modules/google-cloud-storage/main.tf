@@ -8,3 +8,11 @@ resource "google_storage_bucket" "bucket" {
     enabled = var.versioning
   }
 }
+
+# Grant access to the bucket to the principals
+resource "google_storage_bucket_iam_member" "bucket-principals" {
+  for_each = toset(var.principals)
+  bucket   = google_storage_bucket.bucket.name
+  role     = "roles/storage.objectUser"
+  member   = each.value
+}

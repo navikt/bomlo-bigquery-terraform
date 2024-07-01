@@ -36,3 +36,7 @@ resource "google_project_iam_member" "dbt-workload-pool-grants" {
 
   depends_on = [ google_iam_workload_identity_pool_provider.github-provider ]
 }
+
+output "workpool-principalSet" {
+  value = "principalSet://iam.googleapis.com/${google_iam_workload_identity_pool.dbt-workload-pool.name}/attribute.repository/${var.repo_full_name}"
+}

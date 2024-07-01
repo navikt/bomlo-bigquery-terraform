@@ -24,3 +24,9 @@ variable "force_destroy" {
   type        = bool
   default     = false
 }
+
+variable "principals" {
+  default     = []
+  type        = list(string)
+  description = "List of principals to grant access to the bucket."
+}
