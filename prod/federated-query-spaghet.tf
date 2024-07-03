@@ -6,8 +6,8 @@ resource "google_bigquery_data_transfer_config" "query_config" {
   schedule               = "every day 01:00"
   destination_dataset_id = google_bigquery_dataset.spaghet_dataset.dataset_id
   params = {
-    destination_table_name_template = "public_vedtaksperiode_venter"
-    write_disposition               = "WRITE_APPEND"
+    destination_table_name_template = "public_vedtaksperiode_venter$${run_date}"
+    write_disposition               = "WRITE_TRUNCATE"
     query                           = "SELECT * FROM EXTERNAL_QUERY(\"tbd-prod-eacd.europe-north1.spaghet\", \"\"\"${file("./sql/vedtaksperiode_venter.sql")}\"\"\")"
   }
 }
