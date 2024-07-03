@@ -79,6 +79,10 @@ resource "google_datastream_stream" "spaghet_datastream" {
           postgresql_tables {
             table = "begrunnelse"
           }
+
+          postgresql_tables {
+            table = "vedtaksperiode_venter"
+          }
         }
       }
     }
