@@ -83,6 +83,10 @@ resource "google_datastream_stream" "spaghet_datastream" {
           postgresql_tables {
             table = "vedtaksperiode_tilstandsendring"
           }
+
+          postgresql_tables {
+            table = "varsel"
+          }
         }
       }
     }
