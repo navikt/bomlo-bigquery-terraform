@@ -87,6 +87,10 @@ resource "google_datastream_stream" "spaghet_datastream" {
           postgresql_tables {
             table = "varsel"
           }
+
+          postgresql_tables {
+            table = "soknad"
+          }
         }
       }
     }
