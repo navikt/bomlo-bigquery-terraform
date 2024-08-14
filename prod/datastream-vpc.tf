@@ -84,7 +84,7 @@ locals {
 module "cloud_sql_auth_proxy_container_datastream" {
   // https://endoflife.date/cos
   source         = "terraform-google-modules/container-vm/google"
-  version        = "3.1.0"
+  version        = "3.1.1"
   cos_image_name = "cos-101-17162-210-44"
   container = {
     // https://console.cloud.google.com/gcr/images/cloudsql-docker/EU/gce-proxy
