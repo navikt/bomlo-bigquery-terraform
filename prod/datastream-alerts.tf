@@ -58,9 +58,9 @@ resource "google_monitoring_alert_policy" "datastream_unsupported_events_alert_p
       }
 
       # Hvor lenge thresholden skal overskrides før alerten trigges
-      # Vår er satt til 0 minutter, og vi har et vindu på 5 minutter
-      # Det vil si at vi får en alert så snart det er en unsupported events over threshold
-      duration = "0s"
+      # Vår er satt til 1 minutt, og vi har et vindu på 5 minutter
+      # Det vil si at vi får en alert et minutt etter det er unsupported events over threshold
+      duration = "60s"
 
       # Hvor mange timeseries som må over threshold for at alerten skal trigges.
       # Vi har bare en timeserie
