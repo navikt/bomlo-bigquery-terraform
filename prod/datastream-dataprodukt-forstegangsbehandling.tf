@@ -14,13 +14,6 @@ resource "google_bigquery_dataset" "forstegangsbehandling_dataset" {
     role          = "WRITER"
     special_group = "projectWriters"
   }
-  access {
-    view {
-      dataset_id = "bomlo_dataset"
-      project_id = var.gcp_project["project"]
-      table_id   = "antall_soknader_view"
-    }
-  }
 }
 
 resource "google_datastream_connection_profile" "forstegangsbehandling_postgresql_connection_profile" {
