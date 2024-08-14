@@ -43,23 +43,24 @@ resource "google_monitoring_alert_policy" "datastream_unsupported_events_alert_p
   alert_strategy {
     auto_close = "3600s"
   }
-  
+
   # Alert betingelser for når alerten skal trigges
   conditions {
     display_name = "${each.value} - Stream unsupported event count"
-    
+
     condition_threshold {
       filter = "resource.type = \"datastream.googleapis.com/Stream\" AND resource.labels.stream_id = \"${each.value}\" AND metric.type = \"datastream.googleapis.com/stream/unsupported_event_count\""
+
       aggregations {
-        alignment_period =  "300s"
+        alignment_period     = "300s"
         cross_series_reducer = "REDUCE_NONE"
-        per_series_aligner = "ALIGN_MEAN"
+        per_series_aligner   = "ALIGN_MEAN"
       }
 
       # Hvor lenge thresholden skal overskrides før alerten trigges
       # Vår er satt til 0 minutter, og vi har et vindu på 5 minutter
       # Det vil si at vi får en alert så snart det er en unsupported events over threshold
-      duration =  "0s"
+      duration = "0s"
 
       # Hvor mange timeseries som må over threshold for at alerten skal trigges.
       # Vi har bare en timeserie
@@ -74,7 +75,7 @@ resource "google_monitoring_alert_policy" "datastream_unsupported_events_alert_p
       threshold_value = 5
       comparison      = "COMPARISON_GT"
     }
-  } 
+  }
 }
 
 # Lag en monitorering policy for å throughput på events i alle datastreams
@@ -98,20 +99,21 @@ resource "google_monitoring_alert_policy" "datastream_throughput_events_alert_po
   # Alert betingelser for når alerten skal trigges
   conditions {
     display_name = "${each.value} - Stream event throughput"
-    
+
     condition_threshold {
       filter = "resource.type = \"datastream.googleapis.com/Stream\" AND resource.labels.stream_id = \"${each.value}\" AND metric.type = \"datastream.googleapis.com/stream/event_count\""
+
       aggregations {
-        alignment_period =  "3600s"
+        alignment_period     = "3600s"
         cross_series_reducer = "REDUCE_NONE"
-        per_series_aligner = "ALIGN_MEAN"
+        per_series_aligner   = "ALIGN_MEAN"
       }
-      
+
       # Hvor lenge thresholden skal overskrides før alerten trigges
       # Denne er satt til 5 timer, og vi har et vindu på 1 time
       # Det vil si at vi får en alert når throughput er under threshold i 5 timer sammenhengende
-      duration =  "18000s"
-      
+      duration = "18000s"
+
       # Hvor mange timeseries som må over threshold for at alerten skal trigges.
       # Vi har bare en timeserie
       trigger {
