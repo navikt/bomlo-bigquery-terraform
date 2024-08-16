@@ -123,8 +123,9 @@ resource "google_monitoring_alert_policy" "datastream_throughput_events_alert_po
       # Ingen data punkter er bad, det skal trigge alert
       evaluation_missing_data = "EVALUATION_MISSING_DATA_ACTIVE"
 
-      # Threshold, gjennomsnittlig mindre enn 2 events de siste 15 minuttene
-      threshold_value = 2
+      # Threshold, gjennomsnittlig mindre enn 2 events den siste timen
+      # For annulleringer datastreamen er threshold satt til 1, pga veldig lav aktivitet om natten
+      threshold_value = each.value == google_datastream_stream.annulleringer_datastream.stream_id ? 1 : 2
       comparison      = "COMPARISON_LT"
     }
   }
