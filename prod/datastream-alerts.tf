@@ -110,9 +110,9 @@ resource "google_monitoring_alert_policy" "datastream_throughput_events_alert_po
       }
 
       # Hvor lenge thresholden skal overskrides før alerten trigges
-      # Denne er satt til 5 timer, og vi har et vindu på 1 time
-      # Det vil si at vi får en alert når throughput er under threshold i 5 timer sammenhengende
-      duration = "18000s"
+      # Denne er satt til 6 timer, og vi har et vindu på 1 time
+      # Det vil si at vi får en alert når throughput er under threshold i 6 timer sammenhengende
+      duration = "21600s"
 
       # Hvor mange timeseries som må over threshold for at alerten skal trigges.
       # Vi har bare en timeserie
@@ -123,9 +123,8 @@ resource "google_monitoring_alert_policy" "datastream_throughput_events_alert_po
       # Ingen data punkter er bad, det skal trigge alert
       evaluation_missing_data = "EVALUATION_MISSING_DATA_ACTIVE"
 
-      # Threshold, gjennomsnittlig mindre enn 2 events den siste timen
-      # For annulleringer datastreamen er threshold satt til 1, pga veldig lav aktivitet om natten
-      threshold_value = each.value == google_datastream_stream.annulleringer_datastream.stream_id ? 1 : 2
+      # Threshold, gjennomsnittlig mindre enn 1 event den siste timen
+      threshold_value = 1
       comparison      = "COMPARISON_LT"
     }
   }
