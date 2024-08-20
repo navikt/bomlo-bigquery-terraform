@@ -91,6 +91,10 @@ resource "google_datastream_stream" "spaghet_datastream" {
           postgresql_tables {
             table = "soknad"
           }
+
+          postgresql_tables {
+            table = "vedtaksperiode_data"
+          }
         }
       }
     }
