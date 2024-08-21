@@ -101,7 +101,7 @@ resource "google_monitoring_alert_policy" "datastream_throughput_events_alert_po
     display_name = "${each.value} - Stream event throughput"
 
     condition_threshold {
-      filter = "resource.type = \"datastream.googleapis.com/Stream\" AND resource.labels.stream_id = \"${each.value}\" AND metric.type = \"datastream.googleapis.com/stream/event_count\""
+      filter = "resource.type = \"datastream.googleapis.com/Stream\" AND resource.labels.stream_id = \"${each.value}\" AND metric.type = \"datastream.googleapis.com/stream/event_count\" AND metric.labels.read_method = \"postgresql-cdc\""
 
       aggregations {
         alignment_period     = "3600s"
