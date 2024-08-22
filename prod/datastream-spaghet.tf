@@ -95,6 +95,10 @@ resource "google_datastream_stream" "spaghet_datastream" {
           postgresql_tables {
             table = "vedtaksperiode_data"
           }
+
+          postgresql_tables {
+            table = "annullering_arsak"
+          }
         }
       }
     }
