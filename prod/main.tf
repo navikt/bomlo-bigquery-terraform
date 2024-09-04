@@ -40,6 +40,6 @@ module "google_storage_bucket_dbt_state" {
   name                        = "tbd-bomlo-dbt-state"
   location                    = var.gcp_project["region"]
   versioning                  = false
-  principals                  = [module.google_bigquery_workload_pool.workpool-principalSet]
+  principals                  = [module.google_bigquery_workload_pool.workpool-sa-email]
   uniform_bucket_level_access = true
 }

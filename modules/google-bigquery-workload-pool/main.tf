@@ -27,16 +27,32 @@ resource "google_iam_workload_identity_pool_provider" "github-provider" {
   } 
 }
 
-# Grant roles to the workload pool
+# Make a SA for the dbt workload pool
+# This is the SA that will be used to run dbt jobs
+resource "google_service_account" "dbt-workload-pool-sa" {
+  account_id   = "bomlo-dbt-sa"
+  display_name = "Bømlo dbt service account"
+  project      = var.project_id
+  description  = "Service konto for dbt prosjektet i Bømlo. Brukes av dbt fra GitHub repoet bomlo-dbt via workload pool."
+}
+
+# Grant the workload pool provider access to the SA
+resource "google_service_account_iam_member" "workpool-user" {
+  service_account_id = google_service_account.dbt-workload-pool-sa.name
+  role               = "roles/iam.workloadIdentityUser"
+  member             = "principalSet://iam.googleapis.com/${google_iam_workload_identity_pool.dbt-workload-pool.name}/attribute.repository/${var.repo_full_name}" 
+}
+
+# Grant roles to the service account
 resource "google_project_iam_member" "dbt-workload-pool-grants" {
   for_each = toset(var.grants)
   project  = var.project_id
   role     = each.value
-  member   = "principalSet://iam.googleapis.com/${google_iam_workload_identity_pool.dbt-workload-pool.name}/attribute.repository/${var.repo_full_name}"
+  member   = "serviceAccount:${google_service_account.dbt-workload-pool-sa.email}"
 
   depends_on = [ google_iam_workload_identity_pool_provider.github-provider ]
 }
 
-output "workpool-principalSet" {
-  value = "principalSet://iam.googleapis.com/${google_iam_workload_identity_pool.dbt-workload-pool.name}/attribute.repository/${var.repo_full_name}"
+output "workpool-sa-email" {
+  value = "serviceAccount:${google_service_account.dbt-workload-pool-sa.email}"
 }
