@@ -112,7 +112,8 @@ resource "google_monitoring_alert_policy" "datastream_throughput_events_alert_po
       # Hvor lenge thresholden skal overskrides før alerten trigges
       # Denne er satt til 6 timer, og vi har et vindu på 1 time
       # Det vil si at vi får en alert når throughput er under threshold i 6 timer sammenhengende
-      duration = "21600s"
+      # Annulleringer streamen har lavere volum i helgene, så vi har satt en høyere threshold på 24 timer
+      duration = each.value == google_datastream_stream.annulleringer_datastream.stream_id ? "86400s" : "21600s"
 
       # Hvor mange timeseries som må over threshold for at alerten skal trigges.
       # Vi har bare en timeserie
