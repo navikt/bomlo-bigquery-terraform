@@ -99,6 +99,10 @@ resource "google_datastream_stream" "spaghet_datastream" {
           postgresql_tables {
             table = "annullering_arsak"
           }
+
+          postgresql_tables {
+            table = "utkast_til_vedtak"
+          }
         }
       }
     }
