@@ -111,6 +111,14 @@ resource "google_datastream_stream" "spaghet_datastream" {
           postgresql_tables {
             table = "oppgave_endret"
           }
+
+          postgresql_tables {
+            table = "lagt_paa_vent"
+          }
+
+          postgresql_tables {
+            table = "lagt_paa_vent_arsak"
+          }
         }
       }
     }
