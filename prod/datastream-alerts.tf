@@ -6,7 +6,6 @@
 # Lag en liste over alle datastream stream_id som skal monitoreres
 locals {
   datastreams = toset([
-    google_datastream_stream.arbeidsgiveropplysninger_datastream.stream_id,
     google_datastream_stream.forstegangsbehandling_datastream.stream_id,
     google_datastream_stream.spaghet_datastream.stream_id,
     google_datastream_stream.spre_styringsinfo_datastream.stream_id,
