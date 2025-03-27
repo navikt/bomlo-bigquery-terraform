@@ -14,6 +14,11 @@ resource "google_bigquery_dataset" "spaghet_dataset" {
     role          = "WRITER"
     special_group = "projectWriters"
   }
+
+  access {
+    role          = "WRITER"
+    user_by_email = google_service_account.federated_query_sa.email
+  }
 }
 
 resource "google_datastream_connection_profile" "spaghet_postgresql_connection_profile" {
@@ -118,6 +123,10 @@ resource "google_datastream_stream" "spaghet_datastream" {
 
           postgresql_tables {
             table = "lagt_paa_vent_arsak"
+          }
+
+          postgresql_tables {
+            table = "inntektsmelding_haandtert"
           }
         }
       }
