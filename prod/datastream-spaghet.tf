@@ -128,6 +128,10 @@ resource "google_datastream_stream" "spaghet_datastream" {
           postgresql_tables {
             table = "inntektsmelding_haandtert"
           }
+
+          postgresql_tables {
+            table = "vedtaksdata"
+          }
         }
       }
     }
