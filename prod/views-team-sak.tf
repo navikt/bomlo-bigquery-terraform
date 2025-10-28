@@ -166,6 +166,12 @@ module "saksbehandlingsstatistikk_til_team_sak_view" {
         mode        = "NULLABLE"
       },
       {
+        name        = "yrkesaktivitetstype"
+        type        = "STRING"
+        description = "Hvilken type yrkesaktivitets / inntektsforhold / arbeidssituasjon som gjelder for behandlingen"
+        mode        = "NULLABLE"
+      },
+      {
         name        = "versjon"
         type        = "STRING"
         description = "Skjemaversjon. Ved endringer og utvidelser i felter øker vi versjon"
@@ -197,6 +203,7 @@ SELECT
   JSON_VALUE(DATA, "$.beslutterEnhet") AS beslutterenhet,
   JSON_VALUE(DATA, "$.periodetype") AS periodetype,
   JSON_VALUE(DATA, "$.mottaker") AS mottaker,
+  yrkesaktivitetstype,
   versjon
 FROM
   `${var.gcp_project["project"]}.${google_bigquery_dataset.spre_styringsinfo_dataset.dataset_id}.public_behandlingshendelse`
