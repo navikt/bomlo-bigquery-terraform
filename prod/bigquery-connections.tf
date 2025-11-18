@@ -65,3 +65,20 @@ resource "google_bigquery_connection" "forstegangsbehandling-bigquery-connection
     }
   }
 }
+
+resource "google_bigquery_connection" "spre_styringsinfo-bigquery-connection" {
+  connection_id = "spre_styringsinfo"
+  location      = "europe-north1"
+  friendly_name = "spre_styringsinfo"
+  description   = "Kobling til spaghet postgres basen fra BigQuery"
+  cloud_sql {
+    instance_id = data.google_sql_database_instance.spre_styringsinfo_db.connection_name
+
+    database    = "spre-styringsinfo"
+    type        = "POSTGRES"
+    credential {
+      username = local.spre_styringsinfo_bigquery_connection_user.username
+      password = local.spre_styringsinfo_bigquery_connection_user.password
+    }
+  }
+}

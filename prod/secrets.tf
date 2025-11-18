@@ -34,6 +34,12 @@ data "google_secret_manager_secret_version" "spesialist_bigquery_connection_user
   secret = "spesialist_bigquery_connection_user_secret"
 }
 
+data "google_secret_manager_secret_version" "spre_styringsinfo_bigquery_connection_user_secret" {
+  secret = "spre_styringsinfo_bigquery_connection_user_secret"
+}
+
+
+
 # Locals for å decode secrets fra JSON format
 locals {
   dataprodukt_arbeidsgiveropplysninger_db_credentials = jsondecode(
@@ -71,4 +77,9 @@ locals {
   spesialist_bigquery_connection_user = jsondecode(
     data.google_secret_manager_secret_version.spesialist_bigquery_connection_user_secret.secret_data
   )
+
+  spre_styringsinfo_bigquery_connection_user = jsondecode(
+    data.google_secret_manager_secret_version.spre_styringsinfo_bigquery_connection_user_secret.secret_data
+  )
+
 }
