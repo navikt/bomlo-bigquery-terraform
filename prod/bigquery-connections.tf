@@ -74,8 +74,8 @@ resource "google_bigquery_connection" "spre_styringsinfo-bigquery-connection" {
   cloud_sql {
     instance_id = data.google_sql_database_instance.spre_styringsinfo_db.connection_name
 
-    database    = "spre-styringsinfo"
-    type        = "POSTGRES"
+    database = "spre-styringsinfo"
+    type     = "POSTGRES"
     credential {
       username = local.spre_styringsinfo_bigquery_connection_user.username
       password = local.spre_styringsinfo_bigquery_connection_user.password
