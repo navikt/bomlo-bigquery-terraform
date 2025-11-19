@@ -19,6 +19,14 @@ resource "google_bigquery_dataset" "spaghet_dataset" {
     role          = "WRITER"
     user_by_email = google_service_account.federated_query_sa.email
   }
+
+  access {
+    view {
+      dataset_id = "dbt_staging"
+      project_id = "tbd-prod-eacd"
+      table_id   = "stg__spaghet_dataset_vedtaksdata"
+    }
+  }
 }
 
 resource "google_datastream_connection_profile" "spaghet_postgresql_connection_profile" {
