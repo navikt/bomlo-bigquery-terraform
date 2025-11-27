@@ -30,10 +30,10 @@ resource "google_iam_workload_identity_pool_provider" "github-provider" {
 # Make a SA for the dbt workload pool
 # This is the SA that will be used to run dbt jobs
 resource "google_service_account" "dbt-workload-pool-sa" {
-  account_id   = "bomlo-dbt-sa"
+  account_id   = "bomlo-dbt-sa-uvigcy"
   display_name = "Bømlo dbt service account"
   project      = var.project_id
-  description  = "Service konto for dbt prosjektet i Bømlo. Brukes av dbt fra GitHub repoet bomlo-dbt via workload pool."
+  description  = "Service konto for dbt prosjektet i Bømlo. Brukes av dbt fra GitHub repoet bomlo-dbt via workload pool. 'uvigcy' er random og er der fordi den orginale email'en ble lekket 27.11.25 i GitHub gate."
 }
 
 # Grant the workload pool provider access to the SA
