@@ -94,7 +94,7 @@ resource "google_bigquery_connection" "spare-bigquery-connection" {
   description   = "Kobling til spare postgres basen fra BigQuery"
   cloud_sql {
     instance_id = data.google_sql_database_instance.spare_db.connection_name
-    database    = "spare2"
+    database    = "spare"
     type        = "POSTGRES"
     credential {
       username = local.spare_bigquery_connection_user.username
