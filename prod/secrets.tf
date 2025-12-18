@@ -38,6 +38,9 @@ data "google_secret_manager_secret_version" "spre_styringsinfo_bigquery_connecti
   secret = "spre_styringsinfo_bigquery_connection_user_secret"
 }
 
+data "google_secret_manager_secret_version" "spare_bigquery_connection_user_secret" {
+  secret = "spare_bigquery_connection_user"
+}
 
 
 # Locals for å decode secrets fra JSON format
@@ -82,4 +85,7 @@ locals {
     data.google_secret_manager_secret_version.spre_styringsinfo_bigquery_connection_user_secret.secret_data
   )
 
+  spare_bigquery_connection_user = jsondecode(
+    data.google_secret_manager_secret_version.spare_bigquery_connection_user_secret.secret_data
+  )
 }

@@ -2,6 +2,10 @@ data "google_sql_database_instance" "spesialist-instance-db" {
   name = "spesialist"
 }
 
+data "google_sql_database_instance" "spare_db" {
+  name = "spare2"
+}
+
 resource "google_bigquery_connection" "spesialist-bigquery-connection" {
   connection_id = "spesialist"
   location      = "europe-north1"
@@ -79,6 +83,22 @@ resource "google_bigquery_connection" "spre_styringsinfo-bigquery-connection" {
     credential {
       username = local.spre_styringsinfo_bigquery_connection_user.username
       password = local.spre_styringsinfo_bigquery_connection_user.password
+    }
+  }
+}
+
+resource "google_bigquery_connection" "spare-bigquery-connection" {
+  connection_id = "spare"
+  location      = "europe-north1"
+  friendly_name = "spare"
+  description   = "Kobling til spare postgres basen fra BigQuery"
+  cloud_sql {
+    instance_id = data.google_sql_database_instance.spare_db.connection_name
+    database    = "spare2"
+    type        = "POSTGRES"
+    credential {
+      username = local.spare_bigquery_connection_user.username
+      password = local.spare_bigquery_connection_user.password
     }
   }
 }
