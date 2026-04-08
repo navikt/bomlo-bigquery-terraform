@@ -1,6 +1,6 @@
 # bomlo-bigquery-terraform
 
-Terraform-scipts for å opprette BigQuery-ressurser for Bømloklyngen
+Terraform-scipts for å opprette BigQuery-ressurser for Team SAS
 
 ## Hvordan kjøre Terraform lokalt
 
