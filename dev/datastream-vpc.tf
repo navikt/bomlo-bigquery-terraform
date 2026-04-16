@@ -68,7 +68,7 @@ module "cloud_sql_auth_proxy_container_datastream" {
     command = ["/cloud_sql_proxy"]
     args = [
       "-instances=${join(",", local.proxy_instances)}",
-      "-ip_address_types=PRIVATE"
+      "-ip_address_types=PUBLIC"
     ]
   }
   restart_policy = "Always"
