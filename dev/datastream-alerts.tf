@@ -12,10 +12,30 @@ locals {
 }
 
 
-# Lag en monitorering policy for å sjekke antall unnsupported events i alle datastreams
-resource "google_monitoring_alert_policy" "datastream_unsupported_events_alert_policy" {
+# Lag en log-based metric som teller ERROR og CRITICAL logs fra datastream
+# Dette fanger opp alle typer feil: autentisering, tilkobling, data-problemer, etc.
+resource "google_logging_metric" "datastream_errors" {
+  for_each = local.datastreams
+  name     = replace("datastream-errors-${each.value}", "/[^a-zA-Z0-9_]/", "-")
+  project  = var.gcp_project["project"]
+
+  filter = <<-EOT
+    resource.type="datastream.googleapis.com/Stream"
+    resource.labels.stream_id="${each.value}"
+    severity>=ERROR
+  EOT
+
+  metric_descriptor {
+    metric_kind = "DELTA"
+    value_type  = "INT64"
+  }
+}
+
+# Lag en monitorering policy for å sjekke om datastream har feilet
+# Dette trigger på alle typer feil: credentials rotation, connection issues, unsupported data, etc.
+resource "google_monitoring_alert_policy" "datastream_failure_alert_policy" {
   for_each     = local.datastreams
-  display_name = "${each.value} unsupported events alert policy"
+  display_name = "${each.value} failure alert policy"
   project      = var.gcp_project["project"]
   combiner     = "OR"
   severity     = "ERROR"
@@ -26,98 +46,46 @@ resource "google_monitoring_alert_policy" "datastream_unsupported_events_alert_p
   ]
 
   documentation {
-    subject = "${each.value} har ustøttede events i DEV!"
-    content = "Det er oppdaget ustøttede events i ${each.value} i DEV. Dette betyr at rader fra PostgreSQL ikke kan lastes inn i BigQuery på grunn av formatet på radene. Er det gjort endringrer på tabllene i PostgreSQL basen?"
+    subject = "${each.value} har feilet i DEV!"
+    content = "Datastream ${each.value} i DEV har logget ERROR eller CRITICAL meldinger. Dette kan skyldes credential rotation, tilkoblingsproblemer, data-format issues, eller andre feil. Sjekk logger i Google Cloud Console for detaljer."
   }
 
-  # Lukk alerten automatisk etter 1 time uten data
-  # Unsupported events telles bare når de finnes, og er absent når det ikke er noen
+  # Lukk alerten automatisk etter 1 time uten nye error logs
   alert_strategy {
     auto_close = "3600s"
   }
 
   # Alert betingelser for når alerten skal trigges
   conditions {
-    display_name = "${each.value} - Stream unsupported event count"
+    display_name = "${each.value} - Stream errors"
 
     condition_threshold {
-      filter = "resource.type = \"datastream.googleapis.com/Stream\" AND resource.labels.stream_id = \"${each.value}\" AND metric.type = \"datastream.googleapis.com/stream/unsupported_event_count\""
+      filter = "resource.type=\"datastream.googleapis.com/Stream\" AND resource.labels.stream_id=\"${each.value}\" AND metric.type=\"logging.googleapis.com/user/${google_logging_metric.datastream_errors[each.key].name}\""
 
       aggregations {
-        alignment_period     = "300s"
-        cross_series_reducer = "REDUCE_NONE"
-        per_series_aligner   = "ALIGN_MEAN"
+        alignment_period   = "60s"
+        per_series_aligner = "ALIGN_DELTA"
       }
 
       # Hvor lenge thresholden skal overskrides før alerten trigges
-      # Vår er satt til 1 minutt, og vi har et vindu på 5 minutter
-      # Det vil si at vi får en alert et minutt etter det er unsupported events over threshold
+      # Trigger umiddelbart når error logs oppdages
       duration = "60s"
 
-      # Hvor mange timeseries som må over threshold for at alerten skal trigges.
+      # Hvor mange timeseries som må over threshold for at alerten skal trigges
       # Vi har bare en timeserie
       trigger {
         count = 1
       }
 
-      # Ingen data punkter er bra, skal tolkes som at det ikke er noen unsupported events
+      # Ingen data punkter er bra, skal tolkes som at det ikke er noen errors
       evaluation_missing_data = "EVALUATION_MISSING_DATA_INACTIVE"
 
-      # Threshold, gjennomsnittlig mer enn 5 unsupported events de siste 5 minuttene
-      threshold_value = 5
+      # Threshold, trigger hvis det er noen error logs
+      threshold_value = 0
       comparison      = "COMPARISON_GT"
     }
   }
-}
 
-# Lag en monitorering policy for å throughput på events i alle datastreams
-resource "google_monitoring_alert_policy" "datastream_throughput_events_alert_policy" {
-  for_each     = local.datastreams
-  display_name = "${each.value} throughput på events alert policy"
-  project      = var.gcp_project["project"]
-  combiner     = "OR"
-  severity     = "ERROR"
-
-  # Slack notification channel for å sende alerts, #team-bømlo-data-alerts
-  notification_channels = [
-    data.google_monitoring_notification_channel.slack-notification-channel.name
-  ]
-
-  documentation {
-    subject = "${each.value} har veldig lav throughput av events i DEV!"
-    content = "Det ser ut som ${each.value} i DEV har streamet ingen eller veldig få elementer til BigQuery de siste 5 timene. Dette kan bety veldig lav aktivitet i systemet, eller noe feil i appen som populerer PostgreSQL basen. Sjekk app loggene om det er noe feil."
-  }
-
-  # Alert betingelser for når alerten skal trigges
-  conditions {
-    display_name = "${each.value} - Stream event throughput"
-
-    condition_threshold {
-      filter = "resource.type = \"datastream.googleapis.com/Stream\" AND resource.labels.stream_id = \"${each.value}\" AND metric.type = \"datastream.googleapis.com/stream/event_count\" AND metric.labels.read_method = \"postgresql-cdc\""
-
-      aggregations {
-        alignment_period     = "3600s"
-        cross_series_reducer = "REDUCE_NONE"
-        per_series_aligner   = "ALIGN_MEAN"
-      }
-
-      # Hvor lenge thresholden skal overskrides før alerten trigges
-      # Denne er satt til 6 timer, og vi har et vindu på 1 time
-      # Det vil si at vi får en alert når throughput er under threshold i 6 timer sammenhengende
-      duration = "21600s"
-
-      # Hvor mange timeseries som må over threshold for at alerten skal trigges.
-      # Vi har bare en timeserie
-      trigger {
-        count = 1
-      }
-
-      # Ingen data punkter er bad, det skal trigge alert
-      evaluation_missing_data = "EVALUATION_MISSING_DATA_ACTIVE"
-
-      # Threshold, gjennomsnittlig mindre enn 1 event den siste timen
-      threshold_value = 1
-      comparison      = "COMPARISON_LT"
-    }
-  }
+  # Sørg for at log metric er opprettet før alert policy
+  depends_on = [google_logging_metric.datastream_errors]
 }
