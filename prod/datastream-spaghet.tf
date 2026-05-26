@@ -140,6 +140,15 @@ resource "google_datastream_stream" "spaghet_datastream" {
           postgresql_tables {
             table = "vedtaksdata"
           }
+
+          postgresql_tables {
+            table = "anmodning_om_forkasting"
+          }
+
+
+          postgresql_tables {
+            table = "annullering_berorte_vedtaksperioder"
+          }
         }
       }
     }
