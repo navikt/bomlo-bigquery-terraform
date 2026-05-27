@@ -40,8 +40,7 @@ resource "google_compute_firewall" "allow_datastream_to_cloud_sql" {
     ports = [
       var.dataprodukt_forstegangsbehandling_cloud_sql_port,
       var.spaghet_cloud_sql_port,
-      var.spre_styringsinfo_cloud_sql_port,
-      var.dataprodukt_annulleringer_cloud_sql_port
+      var.spre_styringsinfo_cloud_sql_port
     ]
   }
 
@@ -68,8 +67,7 @@ locals {
   proxy_instances = [
     "${data.google_sql_database_instance.dataprodukt_forstegangsbehandling_db.connection_name}=tcp:0.0.0.0:${var.dataprodukt_forstegangsbehandling_cloud_sql_port}",
     "${data.google_sql_database_instance.spaghet_db.connection_name}=tcp:0.0.0.0:${var.spaghet_cloud_sql_port}",
-    "${data.google_sql_database_instance.spre_styringsinfo_db.connection_name}=tcp:0.0.0.0:${var.spre_styringsinfo_cloud_sql_port}",
-    "${data.google_sql_database_instance.annulleringer_db.connection_name}=tcp:0.0.0.0:${var.dataprodukt_annulleringer_cloud_sql_port}",
+    "${data.google_sql_database_instance.spre_styringsinfo_db.connection_name}=tcp:0.0.0.0:${var.spre_styringsinfo_cloud_sql_port}"
   ]
 }
 

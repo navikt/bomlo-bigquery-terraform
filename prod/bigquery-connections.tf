@@ -42,22 +42,6 @@ resource "google_bigquery_connection" "spaghet-bigquery-connection" {
   }
 }
 
-resource "google_bigquery_connection" "annulleringer-bigquery-connection" {
-  connection_id = "dataprodukt-annulleringer"
-  location      = "europe-north1"
-  friendly_name = "Dataprodukt annulleringer"
-  description   = "Kobling til dataproduktet annulleringer sin postgres base fra BigQuery"
-  cloud_sql {
-    instance_id = data.google_sql_database_instance.annulleringer_db.connection_name
-    database    = "annulleringer"
-    type        = "POSTGRES"
-    credential {
-      username = local.annulleringer_bigquery_connection_user.username
-      password = local.annulleringer_bigquery_connection_user.password
-    }
-  }
-}
-
 resource "google_bigquery_connection" "forstegangsbehandling-bigquery-connection" {
   connection_id = "dataprodukt-forstegangsbehandlinger"
   location      = "europe-north1"
