@@ -36,7 +36,7 @@ data "google_secret_manager_secret_version" "spedisjon_bigquery_connection_user_
 
 # Locals for å decode secrets fra JSON format
 locals {
-  
+
   dataprodukt_forstegangsbehandling_db_credentials = jsondecode(
     data.google_secret_manager_secret_version.forstegangsbehandling_datastream_user_secret.secret_data
   )
