@@ -59,9 +59,6 @@ data "google_sql_database_instance" "spre_styringsinfo_db" {
   name = "spre-styringsinfo"
 }
 
-data "google_sql_database_instance" "annulleringer_db" {
-  name = "dataprodukt-annulleringer"
-}
 
 locals {
   proxy_instances = [
