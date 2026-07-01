@@ -195,6 +195,8 @@ SELECT
   JSON_VALUE(DATA, "$.behandlingsmetode") AS behandlingsmetode,
   JSON_VALUE(DATA, "$.saksbehandlerEnhet") AS saksbehandlerenhet,
   JSON_VALUE(DATA, "$.beslutterEnhet") AS beslutterenhet,
+  JSON_VALUE(DATA, "$.saksbehandlerAvdeling") AS saksbehandlerAvdeling,
+  JSON_VALUE(DATA, "$.beslutterAvdeling") AS beslutterAvdeling,
   JSON_VALUE(DATA, "$.periodetype") AS periodetype,
   JSON_VALUE(DATA, "$.mottaker") AS mottaker,
   versjon
