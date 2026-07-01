@@ -154,6 +154,18 @@ module "saksbehandlingsstatistikk_til_team_sak_view" {
         mode        = "NULLABLE"
       },
       {
+        name        = "saksbehandlerAvdeling"
+        type        = "STRING"
+        description = "Identifiserer hvilken avdeling saksbehandler tilhører"
+        mode        = "NULLABLE"
+      },
+      {
+        name        = "beslutterAvdeling"
+        type        = "STRING"
+        description = "Identifiserer hvilken avdeling beslutter tilhører"
+        mode        = "NULLABLE"
+      },
+      {
         name        = "periodetype"
         type        = "STRING"
         description = "Angir om saken er en førstegangsbehandling der inngangsvilkår skal vurderes, eller om det er en forlengelse der dette ikke er nødvendig"
